@@ -35,11 +35,6 @@ interface Handler {
 
 
 class StaticFileHandler implements Handler {
-
-  constructor(basePath: string) {
-    this.#basePath = basePath;
-  }
-
   static handler(request) {
     console.log(requenst, 'static')
     return new Reseponse("TEST");
