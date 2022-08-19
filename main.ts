@@ -33,10 +33,10 @@ type RequestHandler = (Request) => Response;
 
 class StaticFileHandler  {
 
-  #basePath: string;
+  #basePath: string = "";
 
-  constructor(basePath: String) {
-    this.#basePath = basePath;
+  constructor(base: string) {
+    this.#basePath = base;
   }
 
   handler(request: Request): Response {
