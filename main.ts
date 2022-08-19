@@ -28,19 +28,13 @@ class StripStream extends TransformStream {
 type Route = [URLPattern, RequestHandler];
 type RequestHandler = (Request) => Response;
 
-interface Handler {
-  handler(reqeust: Request): Response;
-  readonly pattern: URLPattern;
-}
-
-
-class StaticFileHandler implements Handler {
-  static handler(request) {
+class StaticFileHandler  {
+  static handler(request: Request): Response {
     console.log(request, 'static')
     return new Response("TEST");
   }
 
-  static get pattern() {
+  static get pattern(): URLPattern {
     return new URLPattern({ pathname: "*" })
   }
 }
