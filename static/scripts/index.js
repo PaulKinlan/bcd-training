@@ -29,6 +29,9 @@ onload = () => {
       <p>${item.creator} created this feature because <blockquote>${item.motivation}</blockquote></p>
       <p>This feature was initially propose in <a href=${item.initial_public_proposal_url}>${item.initial_public_proposal_url}</a></p>
       <p>This feature is in "<a href=${item.standards.spec}>${item.standards.status.text}</a>"`)}
+      <h3>Resources</h3>
+      <p>Docs: ${item.resources.docs.map(item => html`<a href=${item}>${item}</a>`)}</p>
+      <p>Samples: ${item.resources.samples.map(item => html`<a href=${item}>${item}</a>`)}</p>
     <h2>Removed in ${version} </h2>
     `, outputEl);
   };
