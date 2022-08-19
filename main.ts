@@ -1,4 +1,8 @@
-import { serve } from "https://deno.land/std@0.145.0/http/server.ts";
+import { serve } from "https://deno.land/std@0.152.0/http/server.ts";
+import { join } from "https://deno.land/std@0.152.0/path/mod.ts";
+
+//import * as mod from "https://deno.land/std@.152.0/io/mod.ts";
+
 
 class StripStream extends TransformStream {
   constructor() {
@@ -24,17 +28,24 @@ class StripStream extends TransformStream {
   }
 }
 
-
 type Route = [URLPattern, RequestHandler];
 type RequestHandler = (Request) => Response;
 
 class StaticFileHandler  {
-  static handler(request: Request): Response {
-    console.log(request, 'static')
-    return new Response("TEST");
+
+  #basePath: string;
+
+  constructor(basePath: String) {
+    this.#basePath = basePath;
   }
 
-  static get pattern(): URLPattern {
+  handler(request: Request): Response {
+    const path = join(Deno.cwd(), this.#basePath, request.url.pathname)
+    const file = Deno.readFile(path);
+    return new Response(file);
+  }
+
+  get pattern(): URLPattern {
     return new URLPattern({ pathname: "*" })
   }
 }
@@ -42,6 +53,7 @@ class StaticFileHandler  {
 serve((req: Request) => {
   const url = req.url;
   console.log(url)
+  const staticFiles = new StaticFileHandler('static');
   let response: Response = new Response("<html>404</html>", { status: 404 });
 
   const routes: Array<Route> = [
@@ -55,8 +67,8 @@ serve((req: Request) => {
     ],
     // Fall through.
     [
-      StaticFileHandler.pattern,
-      StaticFileHandler.handler
+      staticFiles.pattern,
+      staticFiles.handler
     ]
   ];
 
