@@ -19,7 +19,10 @@ onload = () => {
 
     render(html`
     <h2>Enabled by default in ${version}</h2>
-    ${enabled.map(item => html`<h3>${item.name}</h3><p>${item.summary} <a href="${item.launch_bug_url}">#</a></p>`)}
+    ${enabled.map(item => 
+      html`<h3>${item.name}</h3>
+      <p>${item.summary} <a href=${item.launch_bug_url}>#</a></p>
+      <p>This feature was initially propose in <a href=${initial_public_proposal_url}>${item.initial_public_proposal_url}</a></p>`)}
     <h2>Removed in ${version} </h2>
     `, outputEl);
   };
