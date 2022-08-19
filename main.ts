@@ -41,7 +41,7 @@ class StaticFileHandler implements Handler {
   }
 
   static get pattern() {
-    return new URLPattern({ pathname: "" })
+    return new URLPattern({ pathname: "*" })
   }
 }
 
@@ -54,7 +54,6 @@ serve((req: Request) => {
     [
       new URLPattern({ pathname: "/api/features" }),
       (request) => {
-        console.log(request)
         const version = new URL(req.url).searchParams.get("version") || 100;
         const featuresResponse = fetch(`https://chromestatus.com/api/v0/features?milestone=${version}`);
         return featuresResponse.then(response => new Response(response.body.pipeThrough(new StripStream())));
