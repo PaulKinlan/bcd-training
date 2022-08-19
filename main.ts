@@ -31,6 +31,7 @@ type RequestHandler = (Request) => Response;
 
 serve((req: Request) => {
   const url = req.url;
+  console.log(url)
   let response: Response = new Response(null, { status: 404 });
 
   const routes: Array<Route> = [
