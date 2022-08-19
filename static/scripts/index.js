@@ -26,7 +26,7 @@ onload = () => {
     ${enabled.map(item => 
       html`<h3>${item.name}</h3>
       <p>${item.summary} <a href=${item.launch_bug_url}>#</a></p>
-      <p>${item.creator} created this feature because "<blockquote>${item.motivation}</blockquote>"</p>
+      <p>${item.creator} created this feature because <blockquote>${item.motivation}</blockquote></p>
       <p>This feature was initially propose in <a href=${item.initial_public_proposal_url}>${item.initial_public_proposal_url}</a></p>
       <p>This feature is in "<a href=${item.standards.spec}>${item.standards.status.text}</a>"`)}
     <h2>Removed in ${version} </h2>
