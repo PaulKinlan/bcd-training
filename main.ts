@@ -1,6 +1,5 @@
 import { serve } from "https://deno.land/std@0.145.0/http/server.ts";
 
-
 class StripStream extends TransformStream {
   constructor() {
 
@@ -30,5 +29,5 @@ serve((req: Request) => {
 
   const featuresResponse = fetch(`https://chromestatus.com/api/v0/features?milestone=${version}`);
 
-  return new Response(featuresResponse.then(response => response.body.pipeThrough(new StripStream())));
+  return featuresResponse.then(response => new Response(response.body.pipeThrough(new StripStream())));
 });
