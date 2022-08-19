@@ -1,37 +1,11 @@
 import { serve } from "https://deno.land/std@0.152.0/http/server.ts";
 import { join } from "https://deno.land/std@0.152.0/path/mod.ts";
 
-//import * as mod from "https://deno.land/std@.152.0/io/mod.ts";
+import { Route } from "src/types";
+import { StripStream } from "src/stream-utils";
 
 
-class StripStream extends TransformStream {
-  constructor() {
-
-    let parsedFirstChunk: boolean = false;
-    super({
-      transform(chunk, controller) {
-        if (parsedFirstChunk == false) {
-          // 41,  93, 125,  39, 10 == ")]}'\n"
-          chunk[0] = 0;
-          chunk[1] = 0;
-          chunk[2] = 0;
-          chunk[3] = 0;
-
-          controller.enqueue(chunk);
-          parsedFirstChunk = true;
-        }
-        else {
-          controller.enqueue(chunk);
-        }
-      }
-    })
-  }
-}
-
-type Route = [URLPattern, RequestHandler];
-type RequestHandler = (Request) => Response;
-
-class StaticFileHandler  {
+class StaticFileHandler {
 
   #basePath: string = "";
 
