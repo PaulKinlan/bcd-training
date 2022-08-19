@@ -29,7 +29,7 @@ class StripStream extends TransformStream {
 const api = new Router();
 
 api.get("/api/features", (ctx) => {
-  const version = ctx.request.searchParams.get("version") || 100;
+  const version = new URL(ctx.request.url).searchParams.get("version") || 100;
   const featuresResponse = fetch(`https://chromestatus.com/api/v0/features?milestone=${version}`);
   ctx.response = featuresResponse.then(response => new Response(response.body.pipeThrough(new StripStream())));
 })
