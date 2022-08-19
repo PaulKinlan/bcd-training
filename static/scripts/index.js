@@ -19,7 +19,7 @@ onload = () => {
 
     render(html`
     <h2>Enabled by default in ${version}</h2>
-    ${enabled.map(item => html`<h3>${item.summary}</h3>`)}
+    ${enabled.map(item => html`<h3>${item.name}</h3><p>${item.summary} <a href="${item.launch_bug_url}">#</a></p>`)}
     <h2>Removed in ${version} </h2>
     `, outputEl);
   };
