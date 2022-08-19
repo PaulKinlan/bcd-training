@@ -9,6 +9,9 @@ onload = () => {
 
   versionEl.onchange = async (e) => {
     const version = e.target.value;
+    if (version == undefined) return;
+
+    
     const versionResponse = await fetch(`/api/features?version=${version}`);
     const versionData = await versionResponse.json();
    
