@@ -1,4 +1,6 @@
 import { serve } from "https://deno.land/std@0.145.0/http/server.ts";
+import { Application, Router } from "https://deno.land/x/oak/mod.ts";
+
 
 class StripStream extends TransformStream {
   constructor() {
@@ -24,10 +26,32 @@ class StripStream extends TransformStream {
   }
 }
 
-serve((req: Request) => {
-  const version = new URL(req.url).searchParams.get("version") || 100;
+const api = new Router();
 
+api.get("/api/features", (ctx) => {
+  const version = ctx.request.searchParams.get("version") || 100;
   const featuresResponse = fetch(`https://chromestatus.com/api/v0/features?milestone=${version}`);
+  ctx.response = featuresResponse.then(response => new Response(response.body.pipeThrough(new StripStream())));
+})
 
-  return featuresResponse.then(response => new Response(response.body.pipeThrough(new StripStream())));
-});
+
+const app = new Application();
+
+app.use(api.routes())
+  .use(async (context, next) => {
+    try {
+      await context.send({
+        root: `${Deno.cwd()}/static`,
+        index: "index.html",
+      });
+    } catch {
+      await next();
+    }
+  })
+  .listen({ port: 8000 });
+
+// serve((req: Request) => {
+//   const version = new URL(req.url).searchParams.get("version") || 100;
+//   const featuresResponse = fetch(`https://chromestatus.com/api/v0/features?milestone=${version}`);
+//   return featuresResponse.then(response => new Response(response.body.pipeThrough(new StripStream())));
+// });
