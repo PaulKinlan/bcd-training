@@ -1,8 +1,9 @@
-import {html, render} from 'https://unpkg.com/lit-html?module';
+import { html, render } from 'https://unpkg.com/lit-html?module';
 
 onload = () => {
   const versionEl = document.getElementById("version");
-  const versions = [ ...Array(104).keys() ].reverse();
+  const outputEl = document.getElementById("output");
+  const versions = [...Array(104).keys()].reverse();
 
   render(html`${versions.map((item) => html`<option value=${item}>${item}</option>`)}`, versionEl);
 
@@ -15,12 +16,10 @@ onload = () => {
     const enabled = versionData["Enabled by default"]
     const removed = versionData["Removed"]
 
-    const output = `
-    <h2>Enabled by default</h2>
-    ${enabled.forEach(item=>'hello')}
-    `
-
-    render(myTemplate('World'), document.body);
-
+    render(html`
+    <h2>Enabled by default in ${version}</h2>
+    ${enabled.map(item => html`<h3>${item.summary}</h3>`)}
+    <h2>Removed in ${version} </h2>
+    `, outputEl);
   };
 };
