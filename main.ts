@@ -17,7 +17,7 @@ class StaticFileHandler {
     const resolvedPathname = (pathname == "" || pathname == "/") ? "/index.html" : pathname;
     const path = join(Deno.cwd(), this.#basePath, resolvedPathname)
     const file = Deno.readFile(path)
-                      .then(data => new Response(data))
+                      .then(data => new Response(data)) // Need to think about content tyoes.
                       .catch(_ => new Response("Not found", { status: 404 }));
 
     return file;
@@ -52,6 +52,7 @@ serve((req: Request) => {
 
   for (const [pattern, handler] of routes) {
     if (pattern.test(url)) {
+      // Find the first matching route.
       const responseFromHandler = handler(req);
 
       response = responseFromHandler;
