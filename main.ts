@@ -45,13 +45,6 @@ class StaticFileHandler implements Handler {
   }
 }
 
-const StaticFileHandler: RequestHanlder = (request) => {
-
-
-  return new Response()
-}
-
-
 serve((req: Request) => {
   const url = req.url;
   console.log(url)
