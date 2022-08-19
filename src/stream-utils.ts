@@ -1,4 +1,4 @@
-class StripStream extends TransformStream {
+export class StripStream extends TransformStream {
     constructor() {
   
       let parsedFirstChunk: boolean = false;

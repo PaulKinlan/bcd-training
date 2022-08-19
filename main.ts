@@ -1,9 +1,8 @@
 import { serve } from "https://deno.land/std@0.152.0/http/server.ts";
 import { join } from "https://deno.land/std@0.152.0/path/mod.ts";
 
-import { Route } from "./src/types";
-import { StripStream } from "./src/stream-utils";
-
+import { Route } from "./src/types.ts";
+import { StripStream } from "./src/stream-utils.ts";
 
 class StaticFileHandler {
 
@@ -14,9 +13,14 @@ class StaticFileHandler {
   }
 
   handler(request: Request): Response {
-    const path = join(Deno.cwd(), this.#basePath, request.url.pathname)
-    const file = Deno.readFile(path);
-    return new Response(file);
+    const pathname = new URL(request.url).pathname;
+    const resolvedPathname = (pathname == "" || pathname == "/") ? "/index.html" : pathname;
+    const path = join(Deno.cwd(), this.#basePath, resolvedPathname)
+    const file = Deno.readFile(path)
+                      .then(data => new Response(data))
+                      .catch(_ => new Response("Not found", { status: 404 }));
+
+    return file;
   }
 
   get pattern(): URLPattern {
@@ -28,7 +32,7 @@ serve((req: Request) => {
   const url = req.url;
   console.log(url)
   const staticFiles = new StaticFileHandler('static');
-  let response: Response = new Response("<html>404</html>", { status: 404 });
+  let response: Response = new Response(new Response("Not found", { status: 404 }));
 
   const routes: Array<Route> = [
     [
@@ -42,13 +46,15 @@ serve((req: Request) => {
     // Fall through.
     [
       staticFiles.pattern,
-      staticFiles.handler
+      staticFiles.handler.bind(staticFiles)
     ]
   ];
 
   for (const [pattern, handler] of routes) {
     if (pattern.test(url)) {
-      response = handler(req);
+      const responseFromHandler = handler(req);
+
+      response = responseFromHandler;
       break;
     }
   }
