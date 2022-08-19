@@ -6,12 +6,7 @@ export class StripStream extends TransformStream {
         transform(chunk, controller) {
           if (parsedFirstChunk == false) {
             // 41,  93, 125,  39, 10 == ")]}'\n"
-            chunk[0] = 0;
-            chunk[1] = 0;
-            chunk[2] = 0;
-            chunk[3] = 0;
-  
-            controller.enqueue(chunk);
+            controller.enqueue(chunk.slice(4));
             parsedFirstChunk = true;
           }
           else {
