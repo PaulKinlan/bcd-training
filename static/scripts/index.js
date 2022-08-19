@@ -11,10 +11,11 @@ onload = () => {
     const version = e.target.value;
     const versionResponse = await fetch(`/api/features?version=${version}`);
     const versionData = await versionResponse.json();
-    console.log(versionData)
+   
+    const featuresByType = versionData.features_by_type;
 
-    const enabled = versionData["Enabled by default"]
-    const removed = versionData["Removed"]
+    const enabled = featuresByType["Enabled by default"];
+    const removed = featuresByType["Removed"];
 
     render(html`
     <h2>Enabled by default in ${version}</h2>
