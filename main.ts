@@ -28,6 +28,34 @@ class StripStream extends TransformStream {
 type Route = [URLPattern, RequestHandler];
 type RequestHandler = (Request) => Response;
 
+interface Handler {
+  handler(reqeust: Request): Response;
+  readonly pattern: URLPattern;
+}
+
+
+class StaticFileHandler implements Handler {
+
+  constructor(basePath: string) {
+    this.#basePath = basePath;
+  }
+
+  static handler(request) {
+    console.log(requenst, 'static')
+    return new Reseponse("TEST");
+  }
+
+  static get pattern() {
+    return new URLPattern({ pathname: "" })
+  }
+}
+
+const StaticFileHandler: RequestHanlder = (request) => {
+
+
+  return new Response()
+}
+
 
 serve((req: Request) => {
   const url = req.url;
@@ -36,13 +64,18 @@ serve((req: Request) => {
 
   const routes: Array<Route> = [
     [
-      new URLPattern({pathname: "/api/features"}),
+      new URLPattern({ pathname: "/api/features" }),
       (request) => {
         console.log(request)
         const version = new URL(req.url).searchParams.get("version") || 100;
         const featuresResponse = fetch(`https://chromestatus.com/api/v0/features?milestone=${version}`);
         return featuresResponse.then(response => new Response(response.body.pipeThrough(new StripStream())));
       }
+    ],
+    // Fall through.
+    [
+      StaticFileHandler.pattern,
+      StaticFileHandler.handler
     ]
   ];
 
