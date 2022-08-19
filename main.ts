@@ -37,7 +37,7 @@ interface Handler {
 class StaticFileHandler implements Handler {
   static handler(request) {
     console.log(request, 'static')
-    return new Reseponse("TEST");
+    return new Response("TEST");
   }
 
   static get pattern() {
