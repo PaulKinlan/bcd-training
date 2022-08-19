@@ -47,8 +47,8 @@ serve((req: Request) => {
   ];
 
   for (const [pattern, handler] of routes) {
-    if (route.pattern.test(url)) {
-      response = route.handler(req);
+    if (pattern.test(url)) {
+      response = handler(req);
       break;
     }
   }
