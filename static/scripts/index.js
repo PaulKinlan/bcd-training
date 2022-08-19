@@ -29,7 +29,7 @@ onload = () => {
       ${('motivation' in item) ? html`<p>${item.creator} created this feature because: <blockquote>${item.motivation}</blockquote></p>` : html``}
       <p>This feature was initially propose in <a href=${item.initial_public_proposal_url}>${item.initial_public_proposal_url}</a></p>
       <p>This feature is in "<a href=${item.standards.spec}>${item.standards.status.text}</a>"
-      <h3>Resources</h3>
+      <h4>Resources</h4>
       ${('docs' in item.resources) ? html`<p>Docs: ${item.resources.docs.map(resource => html`<a href=${resource}>${resource}</a>`)}</p>` : html`No linked docs`}</p>
       ${('samples' in item.resources) ? html`<p>Samples: ${item.resources.samples.map(resource => html`<a href=${resource}>${resource}</a>`)}</p>` : html`No linked samples`}</p>`
     )}
