@@ -1,6 +1,4 @@
 import { serve } from "https://deno.land/std@0.145.0/http/server.ts";
-import { Application, Router } from "https://deno.land/x/oak/mod.ts";
-
 
 class StripStream extends TransformStream {
   constructor() {
@@ -26,32 +24,33 @@ class StripStream extends TransformStream {
   }
 }
 
-const api = new Router();
 
-api.get("/api/features", (ctx) => {
-  const version = new URL(ctx.request.url).searchParams.get("version") || 100;
-  const featuresResponse = fetch(`https://chromestatus.com/api/v0/features?milestone=${version}`);
-  featuresResponse.then(response => ctx.response = new Response(response.body.pipeThrough(new StripStream())));
-})
+type Route = [URLPattern, RequestHandler];
+type RequestHandler = (Request) => Response;
 
 
-const app = new Application();
+serve((req: Request) => {
+  const url = req.url;
+  let response: Response = new Response(null, { status: 404 });
 
-app.use(api.routes())
-  .use(async (context, next) => {
-    try {
-      await context.send({
-        root: `${Deno.cwd()}/static`,
-        index: "index.html",
-      });
-    } catch {
-      await next();
+  const routes: Array<Route> = [
+    [
+      new URLPattern("/api/features"),
+      (request) => {
+        console.log(request)
+        const version = new URL(req.url).searchParams.get("version") || 100;
+        const featuresResponse = fetch(`https://chromestatus.com/api/v0/features?milestone=${version}`);
+        return featuresResponse.then(response => new Response(response.body.pipeThrough(new StripStream())));
+      }
+    ]
+  ];
+
+  for (const [pattern, handler] of routes) {
+    if (route.pattern.test(url)) {
+      response = route.handler(req);
+      break;
     }
-  })
-  .listen({ port: 8000 });
+  }
 
-// serve((req: Request) => {
-//   const version = new URL(req.url).searchParams.get("version") || 100;
-//   const featuresResponse = fetch(`https://chromestatus.com/api/v0/features?milestone=${version}`);
-//   return featuresResponse.then(response => new Response(response.body.pipeThrough(new StripStream())));
-// });
+  return response;
+});
