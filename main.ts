@@ -36,7 +36,7 @@ serve((req: Request) => {
 
   const routes: Array<Route> = [
     [
-      new URLPattern("/api/features"),
+      new URLPattern({pathname: "/api/features"}),
       (request) => {
         console.log(request)
         const version = new URL(req.url).searchParams.get("version") || 100;
