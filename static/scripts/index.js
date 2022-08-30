@@ -21,6 +21,7 @@ onload = () => {
     const originTrials = featuresByType["Origin trial"];
     const flaggedFeatures = featuresByType["In developer trial (Behind a flag)"];
     const removed = featuresByType["Removed"];
+    const deprecated = featuresByType["Deprecated"];
 
     render(html`
     <h1>Chrome ${version}</h1>
@@ -28,6 +29,8 @@ onload = () => {
     ${renderEnabled(enabled, version, versionData)}
     ${renderOriginTrials(originTrials, version, versionData)}
     ${renderFlaggedFeatures(flaggedFeatures, version, versionData)}
+    ${renderDeprecatedFeatures(deprecated, version, versionData)}
+    ${renderRemovedFeatures(removed, version, versionData)}
     `, outputEl);
   };
 };
@@ -62,6 +65,34 @@ const renderOriginTrials = (enabled, version, versionData) => html`
 
 const renderFlaggedFeatures = (enabled, version, versionData) => html`
     <h2 id="flagged">Flagged features in ${version}</h2>
+    <p>This realease of Chrome had ${versionData.total_count} are available behind a flag.</p>
+    ${enabled.map(item =>
+  html`<h3>${item.name}</h3>
+      <p>${item.summary} <a href=${item.launch_bug_url}>#</a></p>
+      ${('motivation' in item) ? html`<p>${item.creator} created this feature because: <blockquote>${item.motivation}</blockquote></p>` : html``}
+      <p>This feature was initially propose in <a href=${item.initial_public_proposal_url}>${item.initial_public_proposal_url}</a></p>
+      <p>This feature is in "<a href=${item.standards.spec}>${item.standards.status.text}</a>"
+      <h4>Resources</h4>
+      ${('docs' in item.resources) ? html`<p>Docs: ${item.resources.docs.map(resource => html`<a href=${resource}>${resource}</a>`)}</p>` : html`No linked docs`}</p>
+      ${('samples' in item.resources) ? html`<p>Samples: ${item.resources.samples.map(resource => html`<a href=${resource}>${resource}</a>`)}</p>` : html`No linked samples`}</p>`
+)}`;
+
+const renderDeprecatedFeatures = (enabled, version, versionData) => html`
+    <h2 id="deprecated">Deprecated features in ${version}</h2>
+    <p>This realease of Chrome had ${versionData.total_count} are available behind a flag.</p>
+    ${enabled.map(item =>
+  html`<h3>${item.name}</h3>
+      <p>${item.summary} <a href=${item.launch_bug_url}>#</a></p>
+      ${('motivation' in item) ? html`<p>${item.creator} created this feature because: <blockquote>${item.motivation}</blockquote></p>` : html``}
+      <p>This feature was initially propose in <a href=${item.initial_public_proposal_url}>${item.initial_public_proposal_url}</a></p>
+      <p>This feature is in "<a href=${item.standards.spec}>${item.standards.status.text}</a>"
+      <h4>Resources</h4>
+      ${('docs' in item.resources) ? html`<p>Docs: ${item.resources.docs.map(resource => html`<a href=${resource}>${resource}</a>`)}</p>` : html`No linked docs`}</p>
+      ${('samples' in item.resources) ? html`<p>Samples: ${item.resources.samples.map(resource => html`<a href=${resource}>${resource}</a>`)}</p>` : html`No linked samples`}</p>`
+)}`;
+
+const renderRemovedFeatures = (enabled, version, versionData) => html`
+    <h2 id="removed">Removed features in ${version}</h2>
     <p>This realease of Chrome had ${versionData.total_count} are available behind a flag.</p>
     ${enabled.map(item =>
   html`<h3>${item.name}</h3>
