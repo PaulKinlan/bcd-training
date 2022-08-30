@@ -18,7 +18,7 @@ onload = () => {
     const featuresByType = versionData.features_by_type;
 
     const enabled = featuresByType["Enabled by default"];
-    const originTrials= featuresByType["Origin trail"]
+    const originTrials = featuresByType["Origin trial"];
     const flaggedFeatures = featuresByType["In developer trial (Behind a flag)"];
     const removed = featuresByType["Removed"];
 
