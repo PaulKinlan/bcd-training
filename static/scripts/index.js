@@ -25,7 +25,7 @@ onload = () => {
 
     render(html`
     <h1>Chrome ${version}</h1>
-    <a href="#enabled">Enabled</a> | <a href="#origin-trial">Origin Trial</a> | <a href="#flagged">Flagged</a>
+    <a href="#enabled">Enabled</a> | <a href="#origin-trial">Origin Trial</a> | <a href="#flagged">Flagged</a> | <a href="#deprecated">Deprecated</a> | <a href="#removed">Removed</a>
     ${renderEnabled(enabled, version, versionData)}
     ${renderOriginTrials(originTrials, version, versionData)}
     ${renderFlaggedFeatures(flaggedFeatures, version, versionData)}
