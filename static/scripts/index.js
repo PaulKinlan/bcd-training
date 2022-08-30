@@ -23,8 +23,8 @@ onload = () => {
 
     render(html`
     <h1>Chrome ${version}</h1>
-    ${renderEnabled(enabled, verion, versionData)}
-    ${renderOriginTrials(enabled, verion, versionData)}
+    ${renderEnabled(enabled, version, versionData)}
+    ${renderOriginTrials(enabled, version, versionData)}
     `, outputEl);
   };
 };
