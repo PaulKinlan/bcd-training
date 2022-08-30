@@ -24,6 +24,7 @@ onload = () => {
 
     render(html`
     <h1>Chrome ${version}</h1>
+    <a href="#enabled">Enabled</a> | <a href="#origin-trial">Origin Trial</a> | <a href="#flagged">Flagged</a>
     ${renderEnabled(enabled, version, versionData)}
     ${renderOriginTrials(originTrials, version, versionData)}
     ${renderFlaggedFeatures(flaggedFeatures, version, versionData)}
@@ -32,7 +33,7 @@ onload = () => {
 };
 
 const renderEnabled = (enabled, version, versionData) => html`
-    <h2>Enabled by default in ${version}</h2>
+    <h2 id="enabled">Enabled by default in ${version}</h2>
     <p>This realease of Chrome had ${versionData.total_count} new features.</p>
     ${enabled.map(item =>
   html`<h3>${item.name}</h3>
@@ -46,7 +47,7 @@ const renderEnabled = (enabled, version, versionData) => html`
 )}`;
 
 const renderOriginTrials = (enabled, version, versionData) => html`
-    <h2>Origin Trials in-progress in ${version}</h2>
+    <h2 id="origin-trial">Origin Trials in-progress in ${version}</h2>
     <p>This realease of Chrome had ${versionData.total_count} new origin trials.</p>
     ${enabled.map(item =>
   html`<h3>${item.name}</h3>
@@ -60,7 +61,7 @@ const renderOriginTrials = (enabled, version, versionData) => html`
 )}`;
 
 const renderFlaggedFeatures = (enabled, version, versionData) => html`
-    <h2>Flagged features in ${version}</h2>
+    <h2 id="flagged">Flagged features in ${version}</h2>
     <p>This realease of Chrome had ${versionData.total_count} are available behind a flag.</p>
     ${enabled.map(item =>
   html`<h3>${item.name}</h3>
