@@ -3,7 +3,7 @@ import { html, render } from 'https://unpkg.com/lit-html?module';
 onload = () => {
   const versionEl = document.getElementById("version");
   const outputEl = document.getElementById("output");
-  const versions = [...Array(104).keys()].reverse();
+  const versions = [...Array(107).keys()].reverse();
 
   render(html`${versions.map((item) => html`<option value=${item}>${item}</option>`)}`, versionEl);
 
