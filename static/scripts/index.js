@@ -43,7 +43,7 @@ const renderEnabled = (enabled, version, versionData) => html`
       <p>${item.summary} <a href=${item.launch_bug_url}>#</a></p>
       ${('motivation' in item) ? html`<p>${item.creator} created this feature because: <blockquote>${item.motivation}</blockquote></p>` : html``}
       <p>This feature was initially propose in <a href=${item.initial_public_proposal_url}>${item.initial_public_proposal_url}</a></p>
-      <p>This feature is in "<a href=${item.standards.spec}>${item.standards.status.text}</a>"
+      <p>This feature specified in "<a href=${item.standards.spec}>${item.standards.status.text}</a>"
       <h4>Resources</h4>
       ${('docs' in item.resources) ? html`<p>Docs: ${item.resources.docs.map(resource => html`<a href=${resource}>${resource}</a>`)}</p>` : html`No linked docs`}</p>
       ${('samples' in item.resources) ? html`<p>Samples: ${item.resources.samples.map(resource => html`<a href=${resource}>${resource}</a>`)}</p>` : html`No linked samples`}</p>`
@@ -57,7 +57,7 @@ const renderOriginTrials = (enabled, version, versionData) => html`
       <p>${item.summary} <a href=${item.launch_bug_url}>#</a></p>
       ${('motivation' in item) ? html`<p>${item.creator} created this feature because: <blockquote>${item.motivation}</blockquote></p>` : html``}
       <p>This feature was initially propose in <a href=${item.initial_public_proposal_url}>${item.initial_public_proposal_url}</a></p>
-      <p>This feature is in "<a href=${item.standards.spec}>${item.standards.status.text}</a>"
+      <p>This feature specified in "<a href=${item.standards.spec}>${item.standards.status.text}</a>"
       <h4>Resources</h4>
       ${('docs' in item.resources) ? html`<p>Docs: ${item.resources.docs.map(resource => html`<a href=${resource}>${resource}</a>`)}</p>` : html`No linked docs`}</p>
       ${('samples' in item.resources) ? html`<p>Samples: ${item.resources.samples.map(resource => html`<a href=${resource}>${resource}</a>`)}</p>` : html`No linked samples`}</p>`
@@ -71,7 +71,7 @@ const renderFlaggedFeatures = (enabled, version, versionData) => html`
       <p>${item.summary} <a href=${item.launch_bug_url}>#</a></p>
       ${('motivation' in item) ? html`<p>${item.creator} created this feature because: <blockquote>${item.motivation}</blockquote></p>` : html``}
       <p>This feature was initially propose in <a href=${item.initial_public_proposal_url}>${item.initial_public_proposal_url}</a></p>
-      <p>This feature is in "<a href=${item.standards.spec}>${item.standards.status.text}</a>"
+      <p>This feature specified in "<a href=${item.standards.spec}>${item.standards.status.text}</a>"
       <h4>Resources</h4>
       ${('docs' in item.resources) ? html`<p>Docs: ${item.resources.docs.map(resource => html`<a href=${resource}>${resource}</a>`)}</p>` : html`No linked docs`}</p>
       ${('samples' in item.resources) ? html`<p>Samples: ${item.resources.samples.map(resource => html`<a href=${resource}>${resource}</a>`)}</p>` : html`No linked samples`}</p>`
@@ -85,7 +85,7 @@ const renderDeprecatedFeatures = (enabled, version, versionData) => html`
       <p>${item.summary} <a href=${item.launch_bug_url}>#</a></p>
       ${('motivation' in item) ? html`<p>${item.creator} created this feature because: <blockquote>${item.motivation}</blockquote></p>` : html``}
       <p>This feature was initially propose in <a href=${item.initial_public_proposal_url}>${item.initial_public_proposal_url}</a></p>
-      <p>This feature is in "<a href=${item.standards.spec}>${item.standards.status.text}</a>"
+      <p>This feature specified in "<a href=${item.standards.spec}>${item.standards.status.text}</a>"
       <h4>Resources</h4>
       ${('docs' in item.resources) ? html`<p>Docs: ${item.resources.docs.map(resource => html`<a href=${resource}>${resource}</a>`)}</p>` : html`No linked docs`}</p>
       ${('samples' in item.resources) ? html`<p>Samples: ${item.resources.samples.map(resource => html`<a href=${resource}>${resource}</a>`)}</p>` : html`No linked samples`}</p>`
@@ -99,7 +99,7 @@ const renderRemovedFeatures = (enabled, version, versionData) => html`
       <p>${item.summary} <a href=${item.launch_bug_url}>#</a></p>
       ${('motivation' in item) ? html`<p>${item.creator} created this feature because: <blockquote>${item.motivation}</blockquote></p>` : html``}
       <p>This feature was initially propose in <a href=${item.initial_public_proposal_url}>${item.initial_public_proposal_url}</a></p>
-      <p>This feature is in "<a href=${item.standards.spec}>${item.standards.status.text}</a>"
+      <p>This feature specified in "<a href=${item.standards.spec}>${item.standards.status.text}</a>"
       <h4>Resources</h4>
       ${('docs' in item.resources) ? html`<p>Docs: ${item.resources.docs.map(resource => html`<a href=${resource}>${resource}</a>`)}</p>` : html`No linked docs`}</p>
       ${('samples' in item.resources) ? html`<p>Samples: ${item.resources.samples.map(resource => html`<a href=${resource}>${resource}</a>`)}</p>` : html`No linked samples`}</p>`
