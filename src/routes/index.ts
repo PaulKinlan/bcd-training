@@ -10,21 +10,28 @@ class Browsers {
     this.#browsers = browsers;
   }
 
-  getBrowserReleaseDate = (browser, version) => {
+  getBrowserReleaseDate = (browser, version) : Set => {
     const releases = {};
 
     return this.#browsers[browser].releases[version].release_date;
   };
 }
 
-const renderBrowsers = (browsers) => {
-  return template`${ Object.entries(browsers).map(([browser, details]) => template`<input type=checkbox name="${browser}" id="${browser}">
+const renderBrowsers = (browsers, selectedBrowsers: Set) => {
+  return template`${ Object.entries(browsers).map(([browser, details]) => template`<input type=checkbox name="${browser}" id="${browser} checked=${selectedBrowser.has(browser)}">
   <label for="${browser}">${details.name}</label>` ) }`
+};
+
+const parseSelectedBrowsers = (request: Request) => {
+  const url = new URL(request.url);
+  return new Set(url.searchParams.keys()); 
 };
 
 export default function render(request: Request, bcd) : Response {
 
   const {__meta, browsers} = bcd;
+
+  const selectedBrowsers = parseSelectedBrowsers();
 
   return template`<html>
 
@@ -40,7 +47,7 @@ export default function render(request: Request, bcd) : Response {
     <form method=GET action="/" >
       <fieldset>
         <legend>Browsers</legend>
-        ${renderBrowsers(browsers)}
+        ${renderBrowsers(browsers, selectedBrowsers)}
       </fieldset>
       <input type=reset>
       <input type=submit>
