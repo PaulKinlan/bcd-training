@@ -16,6 +16,10 @@ const renderBrowsers = (browsers, selectedBrowsers: Set) => {
   <label for="${browser}">${details.name}</label>`)}`
 };
 
+const getSelectedBrowserNames = (browsers, selectedBrowsers: Set) => {
+  return [...selectedBrowsers.keys()].map(browser => browsers[browser].name);
+};
+
 const parseSelectedBrowsers = (request: Request) => {
   const url = new URL(request.url);
   return new Set(url.searchParams.keys());
@@ -135,6 +139,7 @@ export default function render(request: Request, bcd): Response {
     </form>
 
     <h2>Stable APIs</h2>
+    <p>Below is a list of features that are in ${getSelectedBrowserNames(browsers, selectedBrowsers).join(",")}</p>
     <table>
       <thead>
         <td>API</td>
@@ -146,17 +151,12 @@ export default function render(request: Request, bcd): Response {
       </thead>
       <tbody>
         ${
-          features.map(feature=> template`<tr><td>${feature[1]}</td>
-          <td>${feature[2]}</td>
-          <td>${feature[3]}</td>
-          <td>${feature[4]}</td>
-          <td>${feature[5]}</td>
-          <td>${feature[7]}</td></tr>`)
+          features.map(feature=> template`<tr>
+          <td>${feature[1]}</td><td>${feature[2]}</td><td>${feature[3]}</td>
+          <td>${feature[4]}</td><td>${feature[5]}</td><td>${feature[7]}</td></tr>`)
         }
       </tbody>
     </table>
-
-
     <footer><p>Using BCD version: ${__meta.version}, generated on ${__meta.timestamp}</p></footer>
 	</body>
   </html>`
