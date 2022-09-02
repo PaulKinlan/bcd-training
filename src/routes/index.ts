@@ -37,7 +37,7 @@ export default function render(request: Request, bcd) : Response {
   </head>
   <body>
 
-    <form>
+    <form method=GET action="/" >
       <fieldset>
         <legend>Browsers</legend>
         ${renderBrowsers(browsers)}
