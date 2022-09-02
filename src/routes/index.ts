@@ -23,6 +23,8 @@ delete data.webdriver;
 delete data.svg;
 delete data.mathml;
 
+console.log(data)
+
 
 export default function render(request: Request) : Response {
 
