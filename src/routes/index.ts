@@ -39,11 +39,12 @@ export default function render(request: Request, bcd) : Response {
 
     <form>
       <fieldset>
+        <legend>Browsers<legend>
         ${renderBrowsers(browsers)}
       </fieldset>
-
+      <input type=reset>
+      <input type=submit>
     </form>
-    ${bcd.browsers}
 
     <footer><p>Using BCD version: ${__meta.version}, generated on ${__meta.timestamp}</p></footer>
 	</body>
