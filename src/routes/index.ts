@@ -37,7 +37,6 @@ function* itterateFeatures(parent, data) {
 
 const getStableFeatures = (browsers, mustBeIn: Set, data ) => {
   const output = [];
-  console.log(mustBeIn)
   for (let [api, compat] of itterateFeatures("", data)) {
     if ("__compat" in compat) {
       const dates = [];
@@ -70,6 +69,8 @@ const getStableFeatures = (browsers, mustBeIn: Set, data ) => {
           }
         }
       }
+
+      if (isStable == false) continue; // Not stable, skip.
       
       if(dates.length == 0) continue; // we cant work out if its in a a brower due to weird data.
 
