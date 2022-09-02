@@ -31,7 +31,7 @@ export default function render(request: Request, bcd) : Response {
 
   const {__meta, browsers} = bcd;
 
-  const selectedBrowsers = parseSelectedBrowsers();
+  const selectedBrowsers = parseSelectedBrowsers(request);
 
   return template`<html>
 
