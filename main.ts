@@ -2,10 +2,21 @@ import { serve } from "https://deno.land/std@0.152.0/http/server.ts";
 import { join } from "https://deno.land/std@0.152.0/path/mod.ts";
 import { contentType } from "https://deno.land/std@0.152.0/media_types/mod.ts";
 
+import bcd from "https://esm.sh/@mdn/browser-compat-data@latest/data.json" assert { type: "json" };
+
 import { Route } from "./src/types.ts";
 import { StripStream } from "./src/stream-utils.ts";
 
 import index from "./src/routes/index.ts";
+
+
+// Init
+
+delete bcd.webextensions;
+delete bcd.webdriver;
+delete bcd.svg;
+delete bcd.mathml;
+
 
 class StaticFileHandler {
 
@@ -41,7 +52,7 @@ serve((req: Request) => {
     [
       new URLPattern({ pathname: "/" }),
       (request) => {
-        return index(request);
+        return index(request, bcd);
       }
     ],
     // Fall through.

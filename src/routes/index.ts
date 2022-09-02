@@ -1,5 +1,4 @@
 import template from "../flora.ts";
-import data from "https://esm.sh/@mdn/browser-compat-data@latest/data.json" assert { type: "json" };
 
 class Browsers {
   #browsers;
@@ -18,18 +17,14 @@ class Browsers {
   };
 }
 
-delete data.webextensions;
-delete data.webdriver;
-delete data.svg;
-delete data.mathml;
+const renderBrowsers = (browsers) => {
+  return template`${ Object.entries(browsers).map(([browser, details]) => template`<input type=checkbox name="${browser}" id="${browser}">
+  <label for="${browser}">${details.name}</label>` ) }`
+};
 
-console.log(data)
-console.log(data.browsers)
+export default function render(request: Request, bcd) : Response {
 
-
-export default function render(request: Request) : Response {
-
-  const {__meta} = data;
+  const {__meta, browsers} = bcd;
 
   return template`<html>
 
@@ -41,7 +36,14 @@ export default function render(request: Request) : Response {
 	<link rel="author" href="https://paul.kinlan.me/">
   </head>
   <body>
-    ${data.browsers.length}
+
+    <form>
+      <fieldset>
+        ${renderBrowsers(browsers)}
+      </fieldset>
+
+    </form>
+    ${bcd.browsers}
 
     <footer><p>Using BCD version: ${__meta.version}, generated on ${__meta.timestamp}</p></footer>
 	</body>
