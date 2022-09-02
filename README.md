@@ -1,3 +1,3 @@
-# ChromeStatusLite
+# Time to Stable
 
-A tool to query Chrome Status and create a 'release log'
+Gets BCD and compares time in one browser to time in another.
