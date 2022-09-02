@@ -146,7 +146,7 @@ export default function render(request: Request, bcd): Response {
       <tbody>
         ${
           features.map(feature=> template`<tr><td>${feature[1]}</td>
-          <td>${feature[2]}/td>
+          <td>${feature[2]}</td>
           <td>${feature[3]}</td>
           <td>${feature[4]}</td>
           <td>${feature[5]}</td></tr>`)
