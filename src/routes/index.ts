@@ -26,9 +26,6 @@ delete data.mathml;
 
 export default function render(request: Request) : Response {
 
-  d
-
-
   return template`<html>
 
   <head>
@@ -39,7 +36,7 @@ export default function render(request: Request) : Response {
 	<link rel="author" href="https://paul.kinlan.me/">
   </head>
   <body>
-    ${data.browsers}
+    ${data.browsers.length}
 	</body>
   </html>`
 		.then(data => new Response(data, { status: 200, headers: { 'content-type': 'text/html' } }));
