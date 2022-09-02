@@ -111,7 +111,8 @@ export default function render(request: Request, bcd): Response {
 
   const features = getStableFeatures(browsers, selectedBrowsers, api);
 
-  console.log(features);
+  // Formatter that we will use a couple of times.
+  const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
 
   return template`<html>
 
@@ -139,7 +140,7 @@ export default function render(request: Request, bcd): Response {
     </form>
 
     <h2>Stable APIs</h2>
-    <p>Below is a list of features that are in ${getSelectedBrowserNames(browsers, selectedBrowsers).join(",")}</p>
+    <p>Below is a list of features that are in ${formatter.format(getSelectedBrowserNames(browsers, selectedBrowsers))}</p>
     <table>
       <thead>
         <td>API</td>
