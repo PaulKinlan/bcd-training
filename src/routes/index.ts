@@ -1,7 +1,6 @@
 import template from "../flora.ts";
 
-
-export default render = (request: Request) : Response => {
+export default function render(request: Request) : Response {
   return template`<html>
 
   <head>

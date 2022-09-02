@@ -34,7 +34,6 @@ class StaticFileHandler {
 
 serve((req: Request) => {
   const url = req.url;
-  console.log(url)
   const staticFiles = new StaticFileHandler('static');
   let response: Response = new Response(new Response("Not found", { status: 404 }));
 
