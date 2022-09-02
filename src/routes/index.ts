@@ -35,7 +35,7 @@ function* itterateFeatures(parent, data) {
   }
 }
 
-const getStableFeatures = (mustBeIn: Set, data ) => {
+const getStableFeatures = (browsers, mustBeIn: Set, data ) => {
   const output = [];
   for (let [api, compat] of itterateFeatures("", data)) {
     if ("__compat" in compat) {
@@ -57,10 +57,9 @@ const getStableFeatures = (mustBeIn: Set, data ) => {
           support.version_added != "preview" &&
           support.version_added.startsWith("≤") === false
         ) {
-          const dateAddedInBrowser = browsers.getBrowserReleaseDate(
-            browser,
-            support.version_added
-          );
+
+          const dateAddedInBrowser = browsers[browser].releases[support.version_added].release_date
+
           dates.push({ browser: browser, added: new Date(dateAddedInBrowser) });
           browserSupport.push(browser);
 
@@ -105,7 +104,7 @@ export default function render(request: Request, bcd): Response {
 
   const selectedBrowsers = parseSelectedBrowsers(request);
 
-  const features = getStableFeatures(selectedBrowsers, api);
+  const features = getStableFeatures(browsers, selectedBrowsers, api);
 
   console.log(features);
 
