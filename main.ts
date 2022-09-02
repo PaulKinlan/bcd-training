@@ -59,14 +59,15 @@ serve((req: Request) => {
   ];
 
   for (const [pattern, handler] of routes) {
-    if (pattern.test(url)) {
-      // Find the first matching route.
-      const responseFromHandler = handler(req);
+		const patternResult = pattern.exec(url);
+		if (patternResult != null) {
+			// Find the first matching route.
+			const responseFromHandler = handler(req, patternResult);
 
-      response = responseFromHandler;
-      break;
-    }
-  }
+			response = responseFromHandler;
+			break;
+		}
+	}
 
   return response;
 });
