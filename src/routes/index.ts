@@ -39,7 +39,7 @@ export default function render(request: Request, bcd) : Response {
 
     <form>
       <fieldset>
-        <legend>Browsers<legend>
+        <legend>Browsers</legend>
         ${renderBrowsers(browsers)}
       </fieldset>
       <input type=reset>
