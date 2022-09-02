@@ -62,9 +62,7 @@ serve((req: Request) => {
 		const patternResult = pattern.exec(url);
 		if (patternResult != null) {
 			// Find the first matching route.
-			const responseFromHandler = handler(req, patternResult);
-
-			response = responseFromHandler;
+			response = handler(req, patternResult);
 			break;
 		}
 	}
