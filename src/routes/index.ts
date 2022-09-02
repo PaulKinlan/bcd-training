@@ -91,7 +91,6 @@ const getStableFeatures = (browsers, mustBeIn: Set, data ) => {
         latest.browser,
         age,
         ageInDays,
-        browserSupport.join(","),
       ]);
     }
   }
@@ -143,6 +142,7 @@ export default function render(request: Request, bcd): Response {
         <td>Date</td>
         <td>Last Browser</td>
         <td>Date</td>
+        <td>Days</td>
       </thead>
       <tbody>
         ${
@@ -150,7 +150,8 @@ export default function render(request: Request, bcd): Response {
           <td>${feature[2]}</td>
           <td>${feature[3]}</td>
           <td>${feature[4]}</td>
-          <td>${feature[5]}</td></tr>`)
+          <td>${feature[5]}</td>
+          <td>${feature[7]}</td></tr>`)
         }
       </tbody>
     </table>
