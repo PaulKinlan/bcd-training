@@ -24,7 +24,7 @@ delete data.svg;
 delete data.mathml;
 
 console.log(data)
-console.log(browsers)
+console.log(data.browsers)
 
 
 export default function render(request: Request) : Response {
