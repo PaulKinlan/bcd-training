@@ -43,7 +43,7 @@ const getStableFeatures = (mustBeIn: Set, data ) => {
       const browserSupport = [];
       let isStable = false;
       for (let [browser, support] of Object.entries(compat.__compat.support)) {
-        if (mustBeIn.indexOf(browser) < 0) continue;
+        if (mustBeIn.has(browser) < 0) continue;
         
         if ("version_added" in support === false && Array.isArray(support)) {
           support = support[0] // Smash in the first answer for now.
@@ -61,12 +61,11 @@ const getStableFeatures = (mustBeIn: Set, data ) => {
             browser,
             support.version_added
           );
-          //console.log(api, browser, dateAddedInBrowser);
           dates.push({ browser: browser, added: new Date(dateAddedInBrowser) });
           browserSupport.push(browser);
 
           // Only stable if in all 'mustBeIn'
-          if (mustBeIn.every((d) => browserSupport.indexOf(d) >= 0) == true) {
+          if ([...mustBeIn].every((d) => browserSupport.indexOf(d) >= 0) == true) {
             isStable = true;
           }
         }
