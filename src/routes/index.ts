@@ -1,4 +1,4 @@
-import template from "./src/flora.ts";
+import template from "../flora.ts";
 
 
 export default render = (request: Request) : Response => {

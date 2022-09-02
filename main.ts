@@ -5,7 +5,7 @@ import { contentType } from "https://deno.land/std@0.152.0/media_types/mod.ts";
 import { Route } from "./src/types.ts";
 import { StripStream } from "./src/stream-utils.ts";
 
-import index from ".src/routes/index.ts";
+import index from "./src/routes/index.ts";
 
 class StaticFileHandler {
 
