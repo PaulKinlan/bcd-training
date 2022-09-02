@@ -1,5 +1,5 @@
 import template from "../flora.ts";
-import data from "https://esm.sh/@mdn/browser-compat-data@latest/data.json"
+import data from "https://esm.sh/@mdn/browser-compat-data@latest/data.json" assert { type: "json" };
 
 export default function render(request: Request) : Response {
   return template`<html>
