@@ -2,10 +2,10 @@ import { serve } from "https://deno.land/std@0.152.0/http/server.ts";
 import { join } from "https://deno.land/std@0.152.0/path/mod.ts";
 import { contentType } from "https://deno.land/std@0.152.0/media_types/mod.ts";
 
-
-
 import { Route } from "./src/types.ts";
 import { StripStream } from "./src/stream-utils.ts";
+
+import index from ".src/routes/index.ts";
 
 class StaticFileHandler {
 
@@ -40,15 +40,9 @@ serve((req: Request) => {
 
   const routes: Array<Route> = [
     [
-      new URLPattern({ pathname: "/api/features" }),
+      new URLPattern({ pathname: "/" }),
       (request) => {
-        const version = new URL(req.url).searchParams.get("version") || 100;
-        const featuresResponse = fetch(`https://chromestatus.com/api/v0/features?milestone=${version}`);
-        return featuresResponse.then(response => new Response(response.body.pipeThrough(new StripStream()), {
-          status: 200, headers: {
-            'content-type': 'application/json'
-          }
-        }));
+        return index(request);
       }
     ],
     // Fall through.
