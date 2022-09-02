@@ -43,7 +43,7 @@ const getStableFeatures = (browsers, mustBeIn: Set, data ) => {
       const browserSupport = [];
       let isStable = false;
       for (let [browser, support] of Object.entries(compat.__compat.support)) {
-        if (mustBeIn.has(browser) < 0) continue;
+        if (mustBeIn.has(browser) == false) continue; // skip if feature is not in required list.
         
         if ("version_added" in support === false && Array.isArray(support)) {
           support = support[0] // Smash in the first answer for now.
