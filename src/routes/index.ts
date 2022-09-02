@@ -44,7 +44,7 @@ const getStableFeatures = (browsers, mustBeIn: Set, data ) => {
       const browserSupport = [];
       let isStable = false;
       for (let [browser, support] of Object.entries(compat.__compat.support)) {
-        if (mustBeIn.has(browser) == false) continue; // skip if feature is not in required list.
+        if (mustBeIn.has(browser) == false) continue; // skip if we are not looking for this browser
         
         if ("version_added" in support === false && Array.isArray(support)) {
           support = support[0] // Smash in the first answer for now.
@@ -135,6 +135,25 @@ export default function render(request: Request, bcd): Response {
     </form>
 
     <h2>Stable APIs</h2>
+    <table>
+      <thead>
+        <td>API</td>
+        <td>First Browser</td>
+        <td>Date</td>
+        <td>Last Browser</td>
+        <td>Date</td>
+      </thead>
+      <tbody>
+        ${
+          features.map(feature=> template`<td>${feature[1]}</td>
+          <td>${feature[2]}/td>
+          <td>${feature[3]}</td>
+          <td>${feature[4]}</td>
+          <td>${feature[5]}</td>`)
+        }
+
+      </tbody>
+    </table>
 
 
     <footer><p>Using BCD version: ${__meta.version}, generated on ${__meta.timestamp}</p></footer>
