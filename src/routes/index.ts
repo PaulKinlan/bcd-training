@@ -18,7 +18,7 @@ class Browsers {
 }
 
 const renderBrowsers = (browsers, selectedBrowsers: Set) => {
-  return template`${ Object.entries(browsers).map(([browser, details]) => template`<input type=checkbox name="${browser}" id="${browser} checked=${selectedBrowsers.has(browser)}">
+  return template`${ Object.entries(browsers).map(([browser, details]) => template`<input type=checkbox name="${browser}" id="${browser}" checked="${selectedBrowsers.has(browser)}">
   <label for="${browser}">${details.name}</label>` ) }`
 };
 
