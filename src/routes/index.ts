@@ -150,8 +150,6 @@ export default function render(request: Request, bcd): Response {
 
   const tablulateSummary = generateCrossTab(stableFeatures);
 
-  console.log(tablulateSummary);
-
   // Formatter that we will use a couple of times.
   const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
 
@@ -195,10 +193,15 @@ export default function render(request: Request, bcd): Response {
       <caption>First in / Last in</caption>
       <thead>
         <tr>
-          ${ Object.entries(tablulateSummary).map(([key, entry]) => template`<th>${helper.getBrowserName(key)}</th>`) } 
+          ${ Object.entries(selectedBrowsers).map(([key, entry]) => template`<th>${helper.getBrowserName(key)}</th>`) } 
         </tr>
       </thead>
-
+      <tbody>
+        ${ Object.keys(selectedBrowsers).map((lastInKey) => template`<tr>
+          <th scope="row">${helper.getBrowserName(lastInKey)}</th>
+          ${ Object.keys(selectedBrowsers).map((firstInKey) => template`<td>${tablulateSummary[firstInKey][lastInKey]}</td>`) }
+          </tr>`) } 
+      </tbody>
     </table>
 
     <h3>Raw Data</h3>
