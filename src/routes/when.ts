@@ -86,7 +86,15 @@ export default function render(request: Request, bcd): Response {
   </style>
   </head>
   <body>
-
+    <header>
+      <h1>Now Stable</h1>
+    </header>
+    <nav>
+      <ol>
+          <li><a href="/">Home</a></li>
+          <li><a href="/when-stable">Stable</a></li>
+      </ol>
+    </nav>
     <form method=GET action="/when-stable" >
       <fieldset>
         <legend>Browsers</legend>
@@ -137,7 +145,7 @@ export default function render(request: Request, bcd): Response {
    </tbody>
   </table>
      
-    <footer><p>Using BCD version: ${__meta.version}, generated on ${__meta.timestamp}</p></footer>
+    <footer><p>Using BCD version: ${__meta.version}, updated on ${__meta.timestamp}</p></footer>
 	</body>
   </html>`
     .then(data => new Response(data, { status: 200, headers: { 'content-type': 'text/html' } }));
