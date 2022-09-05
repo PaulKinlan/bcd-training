@@ -72,6 +72,7 @@ const getStableFeatures = (browsers, mustBeIn: Set, data) => {
       const dates = [];
       const browserSupport = [];
       let isStable = false;
+      let { mdn_url } = compat.__compat;
       for (let [browser, support] of Object.entries(compat.__compat.support)) {
         if (mustBeIn.has(browser) == false) continue; // skip if we are not looking for this browser
 
@@ -115,6 +116,7 @@ const getStableFeatures = (browsers, mustBeIn: Set, data) => {
       output.push({
         isStable,
         category: root,
+        mdn_url,
         api,
         firstDate: earliest.added,
         firstBrowser: earliest.browser,
@@ -245,7 +247,7 @@ export default function render(request: Request, bcd): Response {
     }
     else {
       response = template`<tr>
-          <td>${feature.api}</td><td>${helper.getBrowserName(feature.firstBrowser)}</td><td>${feature.firstDate.toLocaleDateString()}</td>
+          <td><a href="${feature.mdn_url}">${feature.api}</a></td><td>${helper.getBrowserName(feature.firstBrowser)}</td><td>${feature.firstDate.toLocaleDateString()}</td>
           <td>${helper.getBrowserName(feature.lastBrowser)}</td><td>${feature.lastDate.toLocaleDateString()}</td><td>${feature.ageInDays}</td></tr>`
     }
 
