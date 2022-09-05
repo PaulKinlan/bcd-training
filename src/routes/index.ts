@@ -168,6 +168,10 @@ export default function render(request: Request, bcd): Response {
     width: 100%;
   }
 
+  table.tabular td {
+    text-align:center;
+  }
+
   </style>
   </head>
   <body>
@@ -189,7 +193,7 @@ export default function render(request: Request, bcd): Response {
     <p>Below is a list of features that are in ${formatter.format(helper.getBrowserNames(selectedBrowsers))}</p>
     <h3>Summary</h3>
 
-    <table>
+    <table class=tabular>
       <caption>First in / Last in</caption>
       <thead>
         <tr>
