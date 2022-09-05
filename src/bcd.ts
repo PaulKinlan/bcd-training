@@ -23,7 +23,6 @@ export const getStableFeatures = (browsers, mustBeIn: Set, data) => {
           support.version_added.startsWith("≤") === false
         ) {
 
-          // We need to do something with "mirror"
           let browserKey = browser;
 
           if (support.version_added == "mirror") {
