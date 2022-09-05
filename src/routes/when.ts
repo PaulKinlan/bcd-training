@@ -154,8 +154,10 @@ export default function render(request: Request, bcd): Response {
 
   // Formatter that we will use a couple of times.
   const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
+  let browserList = formatter.format(helper.getBrowserNames(selectedBrowsers));
 
   let currentMonth = "";
+  
 
   return template`<html>
 
@@ -163,6 +165,7 @@ export default function render(request: Request, bcd): Response {
 	<title>Time to...</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
 	<meta name="author" content="Paul Kinlan">
+  <meta name="description" content="A list of features that are considered stable for ${browserList}">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 	<link rel="author" href="https://paul.kinlan.me/">
   <style>
@@ -192,7 +195,7 @@ export default function render(request: Request, bcd): Response {
     </form>
 
     <h2>Stable APIs</h2>
-    <p>Below is a list of features that are in ${formatter.format(helper.getBrowserNames(selectedBrowsers))} ordered reverse chronologically by when they became stable.</p>
+    <p>Below is a list of features that are all in ${browserList}, ordered reverse chronologically by when they became stable.</p>
     
    ${stableFeatures.map(feature => {
     let response;
