@@ -168,10 +168,6 @@ export default function render(request: Request, bcd): Response {
     width: 100%;
   }
 
-  table.tabular td {
-    text-align:center;
-  }
-
   table.features {}
 
   </style>
