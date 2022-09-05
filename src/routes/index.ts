@@ -41,6 +41,7 @@ const parseSelectedFeatures = (request: Request) => {
 
 function* itterateFeatures(data, parent = "", root = "") {
   for (let [topLevelAPI, information] of Object.entries(data)) {
+    console.log(topLevelAPI, parent, root)
     let namespaceAPI = "";
     if (root == "") {
       // We are at the root
@@ -48,7 +49,12 @@ function* itterateFeatures(data, parent = "", root = "") {
       namespaceAPI = "";
     }
     else {
-      namespaceAPI = `${parent}.${topLevelAPI}`;
+      if (parent == "") {
+        namespaceAPI = topLevelAPI;
+      }
+      else {
+        namespaceAPI = `${parent}.${topLevelAPI}`;
+      }
     }
 
     if (topLevelAPI.startsWith("__")) {
