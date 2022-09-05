@@ -89,7 +89,13 @@ const getStableFeatures = (browsers, mustBeIn: Set, data) => {
           support.version_added.startsWith("≤") === false
         ) {
 
-          const dateAddedInBrowser = browsers[browser].releases[support.version_added].release_date
+          let browserKey = browser;
+
+          if (support.version_added == "mirror") {
+            browserKey = browsers[browser].upstream;
+          }
+
+          const dateAddedInBrowser = browsers[browserKey].releases[support.version_added].release_date
 
           if (!!dateAddedInBrowser) {
             // Only add if there is a releaes date, this captures Betas (i.e, Safari)
