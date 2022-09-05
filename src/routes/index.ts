@@ -176,10 +176,11 @@ export default function render(request: Request, bcd): Response {
 
   const tablulateSummary = generateFirstInLastInCrossTab(stableFeatures);
 
+  console.log(tablulateSummary)
+
   // Formatter that we will use a couple of times.
   const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
   let browserList = formatter.format(helper.getBrowserNames(selectedBrowsers));
-
 
   let currentCategory = "";
 
