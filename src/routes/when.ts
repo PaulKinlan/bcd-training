@@ -146,7 +146,7 @@ export default function render(request: Request, bcd): Response {
   const stableFeatures = getStableFeatures(browsers, selectedBrowsers, filteredData);
 
   stableFeatures.sort((a, b) => {
-    return a.lastDate - b.lastDate;
+    return b.lastDate - a.lastDate;
   });
 
   // Formatter that we will use a couple of times.
@@ -198,7 +198,7 @@ export default function render(request: Request, bcd): Response {
       response = template`
           ${(date == "") ? "" : "</tbody></table>"}
           <h4>${date}</h4>
-          <table">
+          <table>
           <thead>
             <tr>
               <th>API</th>
