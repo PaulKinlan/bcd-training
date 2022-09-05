@@ -127,7 +127,7 @@ export default function render(request: Request, bcd): Response {
   <style>
 
   table {
-    layout:fixed;
+    table-layout:fixed;
   }
 
   </style>
