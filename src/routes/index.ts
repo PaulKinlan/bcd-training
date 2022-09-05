@@ -107,7 +107,7 @@ export default function render(request: Request, bcd): Response {
   </head>
   <body>
     <header>
-      <h1>Time to Stable/h1>
+      <h1>Time to Stable</h1>
     </header>
     <nav>
       <ol>
