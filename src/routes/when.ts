@@ -91,8 +91,11 @@ const getStableFeatures = (browsers, mustBeIn: Set, data) => {
 
           const dateAddedInBrowser = browsers[browser].releases[support.version_added].release_date
 
-          dates.push({ browser: browser, added: new Date(dateAddedInBrowser) });
-          browserSupport.push(browser);
+          if (!!dateAddedInBrowser) {
+            // Only add if there is a releaes date, this captures Betas (i.e, Safari)
+            dates.push({ browser: browser, added: new Date(dateAddedInBrowser) });
+            browserSupport.push(browser);
+          }
 
           // Only stable if in all 'mustBeIn'
           if ([...mustBeIn].every((d) => browserSupport.indexOf(d) >= 0) == true) {
