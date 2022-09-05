@@ -30,12 +30,12 @@ const renderFeatures = (features, selectedFeatures: Set) => {
   <label for="feature-${feature}">${details.name}</label>`)}`
 };
 
-const parseSelectedBrowsers = (request: Request) : Set<string> => {
+const parseSelectedBrowsers = (request: Request): Set<string> => {
   const url = new URL(request.url);
   return new Set([...url.searchParams.keys()].filter(key => key.startsWith('browser-')).map(key => key.replace('browser-', '')));
 };
 
-const parseSelectedFeatures = (request: Request) : Set<string> => {
+const parseSelectedFeatures = (request: Request): Set<string> => {
   const url = new URL(request.url);
   return new Set([...url.searchParams.keys()].filter(key => key.startsWith('feature-')).map(key => key.replace('feature-', '')));
 };
@@ -64,7 +64,7 @@ export default function render(request: Request, bcd): Response {
   let browserList = formatter.format(helper.getBrowserNames(selectedBrowsers));
 
   let currentMonth = "";
-  
+
   return template`<html>
 
   <head>
@@ -124,11 +124,11 @@ export default function render(request: Request, bcd): Response {
           </thead>
           <tbody>`
     }
-   
+
     response = template`${(heading != undefined) ? heading : ""}<tr>
         <td><a href="${feature.mdn_url}">${feature.api}</a></td><td>${helper.getBrowserName(feature.firstBrowser)}</td><td>${feature.firstDate.toLocaleDateString()}</td>
         <td>${helper.getBrowserName(feature.lastBrowser)}</td><td>${feature.lastDate.toLocaleDateString()}</td><td>${feature.ageInDays}</td></tr>`
-  
+
     currentMonth = date;
 
     return response;
