@@ -158,11 +158,10 @@ export default function render(request: Request, bcd): Response {
 
   let currentMonth = "";
   
-
   return template`<html>
 
   <head>
-	<title>Time to...</title>
+	<title>Now Stable</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
 	<meta name="author" content="Paul Kinlan">
   <meta name="description" content="A list of features that are considered stable for ${browserList}">
