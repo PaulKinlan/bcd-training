@@ -193,6 +193,7 @@ export default function render(request: Request, bcd): Response {
       <caption>First in / Last in</caption>
       <thead>
         <tr>
+          <th></th>
           ${[...selectedBrowsers].map(key => template`<th>${helper.getBrowserName(key)}</th>`)} 
         </tr>
       </thead>
