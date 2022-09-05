@@ -175,7 +175,7 @@ export default function render(request: Request, bcd): Response {
   </head>
   <body>
 
-    <form method=GET action="/" >
+    <form method=GET action="/when-stable" >
       <fieldset>
         <legend>Browsers</legend>
         ${renderBrowsers(browsers, selectedBrowsers)}
