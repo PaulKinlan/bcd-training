@@ -223,7 +223,7 @@ export default function render(request: Request, bcd): Response {
     </table>
 
     <h3>Raw Data</h3>
-    ${[...selectedFeatures].map(feature => template`<a href="#${feature}-table>"${feature}</a> `)}
+    Quick Links: <ul>${[...selectedFeatures].map(feature => template`<li><a href="#${feature}-table">${feature}</a></li>`)}</ul>
     ${stableFeatures.map(feature => {
     let response;
     if (currentCategory != feature.category) {
