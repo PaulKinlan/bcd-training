@@ -225,8 +225,8 @@ export default function render(request: Request, bcd): Response {
       </thead>
       <tbody>
         ${stableFeatures.map(feature => template`<tr>
-          <td>${feature.api}</td><td>${helper.getBrowserName(feature.firstBrowser)}</td><td>${feature.firstDate}</td>
-          <td>${helper.getBrowserName(feature.lastBrowser)}</td><td>${feature.lastDate}</td><td>${feature.ageInDays}</td></tr>`)}
+          <td>${feature.api}</td><td>${helper.getBrowserName(feature.firstBrowser)}</td><td>${feature.firstDate.toLocaleDateString()}</td>
+          <td>${helper.getBrowserName(feature.lastBrowser)}</td><td>${feature.lastDate.toLocaleDateString()}</td><td>${feature.ageInDays}</td></tr>`)}
       </tbody>
     </table>
     <footer><p>Using BCD version: ${__meta.version}, generated on ${__meta.timestamp}</p></footer>
