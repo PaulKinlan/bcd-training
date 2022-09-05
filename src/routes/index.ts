@@ -96,7 +96,7 @@ const getStableFeatures = (browsers, mustBeIn: Set, data) => {
       const [earliest, latest] = [dates[0], dates[dates.length - 1]];
       const age = latest.added - earliest.added;
       const ageInDays = age / (1000 * 60 * 60 * 24);
-      output.push([{
+      output.push({
         isStable,
         api,
         firstDate: earliest.added,
@@ -105,8 +105,7 @@ const getStableFeatures = (browsers, mustBeIn: Set, data) => {
         lastBrowser: latest.browser,
         age,
         ageInDays,
-      }
-      ]);
+      });
     }
   }
   return output;
