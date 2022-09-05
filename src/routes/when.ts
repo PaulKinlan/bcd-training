@@ -193,7 +193,7 @@ export default function render(request: Request, bcd): Response {
     
    ${stableFeatures.map(feature => {
     let response;
-    const date = dt.getFullYear() + "/" + (dt.getUTCMonth() + 1);
+    const date = feature.lastDate.getFullYear() + "/" + (feature.lastDate.getUTCMonth() + 1);
     if (currentMonth != date) {
       response = template`
           ${(date == "") ? "" : "</tbody></table>"}
