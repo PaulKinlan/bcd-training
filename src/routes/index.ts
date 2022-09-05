@@ -228,8 +228,9 @@ export default function render(request: Request, bcd): Response {
     Quick Links: <ul>${[...selectedFeatures].map(feature => template`<li><a href="#${feature}-table">${feature}</a></li>`)}</ul>
     ${stableFeatures.map(feature => {
     let response;
+    let heading;
     if (currentCategory != feature.category) {
-      response = template`
+      heading = template`
           ${(currentCategory == "") ? "" : "</tbody></table>"}
           <h4>${feature.category} Data</h4>
           <table id="${feature.category}-table">
@@ -246,7 +247,7 @@ export default function render(request: Request, bcd): Response {
           <tbody>`
     }
     
-    response = template`<tr>
+    response = template`${(heading != undefined) ? heading : ""}<tr>
       <td><a href="${feature.mdn_url}">${feature.api}</a></td><td>${helper.getBrowserName(feature.firstBrowser)}</td><td>${feature.firstDate.toLocaleDateString()}</td>
       <td>${helper.getBrowserName(feature.lastBrowser)}</td><td>${feature.lastDate.toLocaleDateString()}</td><td>${feature.ageInDays}</td></tr>`
     

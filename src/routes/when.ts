@@ -193,9 +193,10 @@ export default function render(request: Request, bcd): Response {
     
    ${stableFeatures.map(feature => {
     let response;
+    let heading;
     const date = feature.lastDate.getFullYear() + "/" + (feature.lastDate.getUTCMonth() + 1);
     if (currentMonth != date) {
-      response = template`
+      heading = template`
           ${(date == "") ? "" : "</tbody></table>"}
           <h4>${date}</h4>
           <table>
@@ -212,7 +213,7 @@ export default function render(request: Request, bcd): Response {
           <tbody>`
     }
    
-    response = template`<tr>
+    response = template`${(heading != undefined) ? heading : ""}<tr>
         <td><a href="${feature.mdn_url}">${feature.api}</a></td><td>${helper.getBrowserName(feature.firstBrowser)}</td><td>${feature.firstDate.toLocaleDateString()}</td>
         <td>${helper.getBrowserName(feature.lastBrowser)}</td><td>${feature.lastDate.toLocaleDateString()}</td><td>${feature.ageInDays}</td></tr>`
   
