@@ -192,7 +192,7 @@ export default function render(request: Request, bcd): Response {
     </form>
 
     <h2>Stable APIs</h2>
-    <p>Below is a list of features that are in ${formatter.format(helper.getBrowserNames(selectedBrowsers))} ordered by when they became stable.</p>
+    <p>Below is a list of features that are in ${formatter.format(helper.getBrowserNames(selectedBrowsers))} ordered reverse chronologically by when they became stable.</p>
     
    ${stableFeatures.map(feature => {
     let response;
