@@ -232,9 +232,9 @@ export default function render(request: Request, bcd): Response {
         </tr>
       </thead>
       <tbody>
-        ${[...selectedBrowsers].map((lastInKey) => template`<tr>
-          <th scope="row">First in ${helper.getBrowserName(lastInKey)}</th>
-          ${[...selectedBrowsers].map((firstInKey) => template`<td>${tablulateSummary[firstInKey][lastInKey]}</td>`)}
+        ${[...selectedBrowsers].map((firstInKey) => template`<tr>
+          <th scope="row">First in ${helper.getBrowserName(firstInKey)}</th>
+          ${[...selectedBrowsers].map((lastInKey) => template`<td>${tablulateSummary[firstInKey][lastInKey]}</td>`)}
           </tr>`)} 
       </tbody>
     </table>
