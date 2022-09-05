@@ -103,13 +103,13 @@ const getStableFeatures = (browsers, mustBeIn: Set, data ) => {
 
 export default function render(request: Request, bcd): Response {
 
-  const { __meta, browsers, api } = bcd;
+  const { __meta, browsers, api, css} = bcd;
 
   const helper = new Browsers(browsers);
 
   const selectedBrowsers = parseSelectedBrowsers(request);
 
-  const features = getStableFeatures(browsers, selectedBrowsers, api);
+  const features = getStableFeatures(browsers, selectedBrowsers, { api, css });
 
   // Formatter that we will use a couple of times.
   const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
