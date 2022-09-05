@@ -55,7 +55,7 @@ function* itterateFeatures(data, parent = "", root = "") {
       continue;
     }
 
-    yield [namespaceAPI, information, topLevelAPI, root];
+    yield [namespaceAPI, information, root];
     // Recurse
     yield* itterateFeatures(information, namespaceAPI, root);
   }
@@ -110,6 +110,7 @@ const getStableFeatures = (browsers, mustBeIn: Set, data) => {
       const ageInDays = age / (1000 * 60 * 60 * 24);
       output.push({
         isStable,
+        category: root,
         api,
         firstDate: earliest.added,
         firstBrowser: earliest.browser,
