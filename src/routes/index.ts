@@ -117,6 +117,7 @@ const generateCrossTab = (stableFeatures) => {
   const output = {};
 
   for(const feature in stableFeatures) {
+    console.log(feature)
     if (feature.firstBrowser in output == false) {
       output[feature.firstBrowser] = {};
     }
@@ -196,7 +197,7 @@ export default function render(request: Request, bcd): Response {
         <col span="2" class="flash">
       </colgroup>
       <tr>
-          <td> </td>
+          <td></td>
           <th scope="col">Batman</th>
           <th scope="col">Robin</th>
           <th scope="col">The Flash</th>
