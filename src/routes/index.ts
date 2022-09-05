@@ -39,23 +39,29 @@ const parseSelectedFeatures = (request: Request) => {
   return new Set([...url.searchParams.keys()].filter(key => key.startsWith('feature-')).map(key => key.replace('feature-', '')));
 };
 
-function* itterateFeatures(parent, data) {
+function* itterateFeatures(data, parent = "") {
   for (let [topLevelAPI, information] of Object.entries(data)) {
-    const namespaceAPI = `${parent}.${topLevelAPI}`;
+    let namespaceAPI = "";
+
+    if (parent != "") {
+      namespaceAPI = `${parent}.${topLevelAPI}`;
+    }
+
     if (topLevelAPI.startsWith("__")) {
       continue;
     }
 
-    yield [namespaceAPI, information];
+    yield [namespaceAPI, information, topLevelAPI];
     //console.log(namespaceAPI, information)
     // Recurse
-    yield* itterateFeatures(namespaceAPI, information);
+    yield* itterateFeatures(information, namespaceAPI);
   }
 }
 
 const getStableFeatures = (browsers, mustBeIn: Set, data) => {
   const output = [];
-  for (let [api, compat] of itterateFeatures("", data)) {
+  for (let [api, compat, root] of itterateFeatures(data)) {
+    console.log(root)
     if ("__compat" in compat) {
       const dates = [];
       const browserSupport = [];
