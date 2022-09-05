@@ -175,7 +175,7 @@ export default function render(request: Request, bcd): Response {
   return template`<html>
 
   <head>
-	<title>Time to Stable</title>
+	<title>Time to Stable ${(browserList != "") ? `across ${browserList}` : ""}</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
 	<meta name="author" content="Paul Kinlan">
   <meta name="description" content="A list of features that are considered stable for ${browserList} and when the landed in the first browser and the last">

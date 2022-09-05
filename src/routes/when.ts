@@ -161,7 +161,7 @@ export default function render(request: Request, bcd): Response {
   return template`<html>
 
   <head>
-	<title>Now Stable</title>
+	<title>Now Stable ${(browserList != "") ? `across ${browserList}` : ""}</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
 	<meta name="author" content="Paul Kinlan">
   <meta name="description" content="A list of features that are considered stable for ${browserList}">
