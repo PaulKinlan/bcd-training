@@ -207,18 +207,18 @@ export default function render(request: Request, bcd): Response {
     <h2>Stable APIs</h2>
     <p>Below is a list of features that are in ${formatter.format(helper.getBrowserNames(selectedBrowsers))}</p>
     <h3>Summary</h3>
-
+    
     <table class=tabular>
-      <caption>First in / Last in</caption>
+      <caption>First in A / Last in B</caption>
       <thead>
         <tr>
           <th></th>
-          ${[...selectedBrowsers].map(key => template`<th>${helper.getBrowserName(key)}</th>`)} 
+          ${[...selectedBrowsers].map(key => template`<th>Last in ${helper.getBrowserName(key)}</th>`)} 
         </tr>
       </thead>
       <tbody>
         ${[...selectedBrowsers].map((lastInKey) => template`<tr>
-          <th scope="row">${helper.getBrowserName(lastInKey)}</th>
+          <th scope="row">First in ${helper.getBrowserName(lastInKey)}</th>
           ${[...selectedBrowsers].map((firstInKey) => template`<td>${tablulateSummary[firstInKey][lastInKey]}</td>`)}
           </tr>`)} 
       </tbody>
