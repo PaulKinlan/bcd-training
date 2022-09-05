@@ -44,19 +44,13 @@ function* itterateFeatures(data, parent = "", root = "") {
     if (topLevelAPI.startsWith("__")) {
       continue;
     }
-    
-    console.log(topLevelAPI, parent, root);
-
-    let newRoot;
+    let newRoot = (root == "") ? topLevelAPI : root;
 
     let namespaceAPI = "";
     if (root == "") {
-      // We are at the root
-      newRoot = topLevelAPI;
       namespaceAPI = "";
     }
     else {
-      newRoot = root;
       if (parent == "") {
         namespaceAPI = topLevelAPI;
       }
