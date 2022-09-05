@@ -223,13 +223,14 @@ export default function render(request: Request, bcd): Response {
     </table>
 
     <h3>Raw Data</h3>
+    ${selectedFeatures.map(feature => temlate`<a href="#${feature}-table>${feature}</a> `)}
    ${stableFeatures.map(feature => {
     let response;
     if (currentCategory != feature.category) {
       response = template`
         ${(currentCategory == "") ? "" : "</tbody></table>" }
         <h4>${feature.category} Data</h4>
-        <table>
+        <table id="${feature.category}-table">
         <thead>
           <tr>
             <th>API</th>
