@@ -9,6 +9,10 @@ class Browsers {
   getBrowserReleaseDate = (browser, version): Set => {
     return this.#browsers[browser].releases[version].release_date;
   };
+
+  getBrowserNames = (selectedBrowsers: Set) => {
+    return [...selectedBrowsers.keys()].map(browser => this.#browsers[browser].name);
+  };
 }
 
 const renderBrowsers = (browsers, selectedBrowsers: Set) => {
@@ -16,9 +20,7 @@ const renderBrowsers = (browsers, selectedBrowsers: Set) => {
   <label for="${browser}">${details.name}</label>`)}`
 };
 
-const getSelectedBrowserNames = (browsers, selectedBrowsers: Set) => {
-  return [...selectedBrowsers.keys()].map(browser => browsers[browser].name);
-};
+
 
 const parseSelectedBrowsers = (request: Request) => {
   const url = new URL(request.url);
@@ -149,7 +151,7 @@ export default function render(request: Request, bcd): Response {
     </form>
 
     <h2>Stable APIs</h2>
-    <p>Below is a list of features that are in ${formatter.format(getSelectedBrowserNames(browsers, selectedBrowsers))}</p>
+    <p>Below is a list of features that are in ${formatter.format(helper.getBrowserNames(selectedBrowsers))}</p>
     <h3>Summary</h3>
 
 
