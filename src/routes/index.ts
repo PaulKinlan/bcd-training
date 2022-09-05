@@ -219,36 +219,39 @@ export default function render(request: Request, bcd): Response {
     </table>
 
     <h3>Raw Data</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>API</th>
-          <th>First Browser</th>
-          <th>Date</th>
-          <th>Last Browser</th>
-          <th>Date</th>
-          <th>Days</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${stableFeatures.map(feature => {
-            let response;
-            if (currentCategory != feature.category) {
-              response = template`<tr><th colspan=0>${feature.category}</th></tr>`
-            }
-            else {
-              response = template`<tr>
-                  <td>${feature.api}</td><td>${helper.getBrowserName(feature.firstBrowser)}</td><td>${feature.firstDate.toLocaleDateString()}</td>
-                  <td>${helper.getBrowserName(feature.lastBrowser)}</td><td>${feature.lastDate.toLocaleDateString()}</td><td>${feature.ageInDays}</td></tr>`
-            }
+   ${stableFeatures.map(feature => {
+    let response;
+    if (currentCategory != feature.category) {
+      response = template`
+        ${(currentCategory == "") ? "" : "</tbody></table>" }
+        <h4>${feature.category} Data</h4>
+        <table>
+        <thead>
+          <tr>
+            <th>API</th>
+            <th>First Browser</th>
+            <th>Date</th>
+            <th>Last Browser</th>
+            <th>Date</th>
+            <th>Days</th>
+          </tr>
+        </thead>
+        <tbody>`
+    }
+    else {
+      response = template`<tr>
+        <td>${feature.api}</td><td>${helper.getBrowserName(feature.firstBrowser)}</td><td>${feature.firstDate.toLocaleDateString()}</td>
+        <td>${helper.getBrowserName(feature.lastBrowser)}</td><td>${feature.lastDate.toLocaleDateString()}</td><td>${feature.ageInDays}</td></tr>`
+    }
 
-            currentCategory = feature.category;
+    currentCategory = feature.category;
 
-            return response;
-          }
-        )}
-      </tbody>
-    </table>
+    return response;
+  }
+  )}
+   </tbody>
+  </table>
+     
     <footer><p>Using BCD version: ${__meta.version}, generated on ${__meta.timestamp}</p></footer>
 	</body>
   </html>`
