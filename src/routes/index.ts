@@ -28,12 +28,12 @@ const renderFeatures = (features, selectedFeatures: Set) => {
 const parseSelectedBrowsers = (request: Request) => {
   const url = new URL(request.url);
 
-  return new Set([...url.searchParams.keys()].filter(key => key.startsWith('browser-')).map(key => key.replace('browser-', ''))));
+  return new Set([...url.searchParams.keys()].filter(key => key.startsWith('browser-')).map(key => key.replace('browser-', '')));
 };
 
 const parseSelectedFeatures = (request: Request) => {
   const url = new URL(request.url);
-  return new Set([...url.searchParams.keys()].filter(key => key.startsWith('feature-')).map(key => key.replace('feature-', ''))));
+  return new Set([...url.searchParams.keys()].filter(key => key.startsWith('feature-')).map(key => key.replace('feature-', '')));
 };
 
 
