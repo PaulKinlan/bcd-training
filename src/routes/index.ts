@@ -8,11 +8,15 @@ class Browsers {
 
   getBrowserReleaseDate = (browser, version): Set => {
     return this.#browsers[browser].releases[version].release_date;
-  };
+  }
+
+  getBrowserName = (browser) => {
+    return this.#browsers[browser].name;
+  }
 
   getBrowserNames = (selectedBrowsers: Set) => {
     return [...selectedBrowsers.keys()].map(browser => this.#browsers[browser].name);
-  };
+  }
 }
 
 const renderBrowsers = (browsers, selectedBrowsers: Set) => {
@@ -188,37 +192,26 @@ export default function render(request: Request, bcd): Response {
     <h3>Summary</h3>
 
     <table>
-      <caption>Superheros and sidekicks</caption>
-      <colgroup>
-        <col>
-        <col span="2" class="batman">
-        <col span="2" class="flash">
-      </colgroup>
-      <tr>
-          <td></td>
-          <th scope="col">Batman</th>
-          <th scope="col">Robin</th>
-          <th scope="col">The Flash</th>
-          <th scope="col">Kid Flash</th>
-      </tr>
-      <tr>
-          <th scope="row">Skill</th>
-          <td>Smarts</td>
-          <td>Dex, acrobat</td>
-          <td>Super speed</td>
-          <td>Super speed</td>
-      </tr>
+      <caption>First in / Last in</caption>
+      <thead>
+        <tr>
+          ${ tablulateSummary.map(([key, entry]) => template`<th>${helper.getBrowserName(key)}</th>`) } 
+        </tr>
+      </thead>
+
     </table>
 
     <h3>Raw Data</h3>
     <table>
       <thead>
-        <td>API</td>
-        <td>First Browser</td>
-        <td>Date</td>
-        <td>Last Browser</td>
-        <td>Date</td>
-        <td>Days</td>
+        <tr>
+          <th>API</th>
+          <th>First Browser</th>
+          <th>Date</th>
+          <th>Last Browser</th>
+          <th>Date</th>
+          <th>Days</th>
+        </tr>
       </thead>
       <tbody>
         ${stableFeatures.map(feature => template`<tr>
