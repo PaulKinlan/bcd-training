@@ -99,10 +99,10 @@ const getStableFeatures = (browsers, mustBeIn: Set, data) => {
       output.push([{
         isStable,
         api,
-        earliestDate: earliest.added,
-        earliestBrowser: earliest.browser,
-        latestDate: latest.added,
-        latestBrowser: latest.browser,
+        firstDate: earliest.added,
+        firstBrowser: earliest.browser,
+        lastDate: latest.added,
+        lastBrowser: latest.browser,
         age,
         ageInDays,
       }
@@ -117,15 +117,15 @@ const generateCrossTab = (stableFeatures) => {
   const output = {};
 
   for(const feature in stableFeatures) {
-    if (feature.earliestBrowser in output == false) {
-      output[feature.earliestBrowser] = {};
+    if (feature.firstBrowser in output == false) {
+      output[feature.firstBrowser] = {};
     }
 
-    if (feature.latestBrowser in output[feature.earliestBrowser] == false) {
-      output[feature.earliestBrowser][latestBrowser] = 0;
+    if (feature.lastBrowser in output[feature.firstBrowser] == false) {
+      output[feature.firstBrowser][feature.lastBrowser] = 0;
     }
 
-    output[feature.earliestBrowser][latestBrowser]++;
+    output[feature.firstBrowser][feature.lastBrowser]++;
   }
   return output;
 };
@@ -223,8 +223,8 @@ export default function render(request: Request, bcd): Response {
       </thead>
       <tbody>
         ${stableFeatures.map(feature => template`<tr>
-          <td>${feature.api}</td><td>${feature.earliestBrowser}</td><td>${feature.earliestDate}</td>
-          <td>${feature.latestBrowser}</td><td>${feature.latestDate}</td><td>${feature.ageInDays}</td></tr>`)}
+          <td>${feature.api}</td><td>${feature.firstBrowser}</td><td>${feature.firstDate}</td>
+          <td>${feature.lastBrowser}</td><td>${feature.lastDate}</td><td>${feature.ageInDays}</td></tr>`)}
       </tbody>
     </table>
     <footer><p>Using BCD version: ${__meta.version}, generated on ${__meta.timestamp}</p></footer>
