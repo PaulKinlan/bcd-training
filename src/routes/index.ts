@@ -119,7 +119,7 @@ const generateCrossTab = (stableFeatures) => {
 
   const output = {};
 
-  for(const feature of stableFeatures) {
+  for (const feature of stableFeatures) {
     if (feature.firstBrowser in output == false) {
       output[feature.firstBrowser] = {};
     }
@@ -193,14 +193,14 @@ export default function render(request: Request, bcd): Response {
       <caption>First in / Last in</caption>
       <thead>
         <tr>
-          ${ Object.entries(selectedBrowsers).map(([key, entry]) => template`<th>${helper.getBrowserName(key)}</th>`) } 
+          ${[...selectedBrowsers].map(key => template`<th>${helper.getBrowserName(key)}</th>`)} 
         </tr>
       </thead>
       <tbody>
-        ${ Object.keys(selectedBrowsers).map((lastInKey) => template`<tr>
+        ${[...selectedBrowsers].map((lastInKey) => template`<tr>
           <th scope="row">${helper.getBrowserName(lastInKey)}</th>
-          ${ Object.keys(selectedBrowsers).map((firstInKey) => template`<td>${tablulateSummary[firstInKey][lastInKey]}</td>`) }
-          </tr>`) } 
+          ${[...selectedBrowsers].map((firstInKey) => template`<td>${tablulateSummary[firstInKey][lastInKey]}</td>`)}
+          </tr>`)} 
       </tbody>
     </table>
 
