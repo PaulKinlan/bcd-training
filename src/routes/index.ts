@@ -27,7 +27,6 @@ const renderFeatures = (features, selectedFeatures: Set) => {
 
 const parseSelectedBrowsers = (request: Request) => {
   const url = new URL(request.url);
-
   return new Set([...url.searchParams.keys()].filter(key => key.startsWith('browser-')).map(key => key.replace('browser-', '')));
 };
 
@@ -35,7 +34,6 @@ const parseSelectedFeatures = (request: Request) => {
   const url = new URL(request.url);
   return new Set([...url.searchParams.keys()].filter(key => key.startsWith('feature-')).map(key => key.replace('feature-', '')));
 };
-
 
 function* itterateFeatures(parent, data) {
   for (let [topLevelAPI, information] of Object.entries(data)) {
@@ -116,14 +114,17 @@ const getStableFeatures = (browsers, mustBeIn: Set, data) => {
 export default function render(request: Request, bcd): Response {
 
   const { __meta, browsers, api, css, html, javascript } = bcd;
-  const features = { 'api': { name: "DOM API" }, 'css': { name: "CSS" }, 'html': { name: "HTML" }, 'javascript': { name: "JavaScript" } };
+  const featureConfig = { 'api': { name: "DOM API" }, 'css': { name: "CSS" }, 'html': { name: "HTML" }, 'javascript': { name: "JavaScript" } };
 
   const helper = new Browsers(browsers);
 
   const selectedBrowsers = parseSelectedBrowsers(request);
   const selectedFeatures = parseSelectedFeatures(request);
 
-  const features = getStableFeatures(browsers, selectedBrowsers, { api, css, html, javascript });
+  // only show the features selected.
+  const filteredData = Object.fromEntries(Object.entries(bcd).filter(([key]) => key in featureConfig));
+
+  const stableFeatures = getStableFeatures(browsers, selectedBrowsers, filteredData);
 
   // Formatter that we will use a couple of times.
   const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
@@ -153,7 +154,7 @@ export default function render(request: Request, bcd): Response {
       </fieldset>
       <fieldset>
         <legend>Features</legend>
-        ${renderFeatures(features, selectedFeatures)}
+        ${renderFeatures(featureConfig, selectedFeatures)}
       </fieldset>
       <input type=reset>
       <input type=submit>
@@ -175,10 +176,9 @@ export default function render(request: Request, bcd): Response {
         <td>Days</td>
       </thead>
       <tbody>
-        ${features.map(feature => template`<tr>
+        ${ stableFeatures.map(feature => template`<tr>
           <td>${feature[1]}</td><td>${feature[3]}</td><td>${feature[2]}</td>
-          <td>${feature[5]}</td><td>${feature[4]}</td><td>${feature[7]}</td></tr>`)
-    }
+          <td>${feature[5]}</td><td>${feature[4]}</td><td>${feature[7]}</td></tr>`) }
       </tbody>
     </table>
     <footer><p>Using BCD version: ${__meta.version}, generated on ${__meta.timestamp}</p></footer>
