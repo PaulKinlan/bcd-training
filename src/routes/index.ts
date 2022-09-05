@@ -43,7 +43,10 @@ function* itterateFeatures(data, parent = "") {
   for (let [topLevelAPI, information] of Object.entries(data)) {
     let namespaceAPI = "";
 
-    if (parent != "") {
+    if (parent == "") {
+      namespaceAPI = `${topLevelAPI}`;
+    }
+    else {
       namespaceAPI = `${parent}.${topLevelAPI}`;
     }
 
