@@ -162,6 +162,8 @@ export default function render(request: Request, bcd): Response {
   // Formatter that we will use a couple of times.
   const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
 
+  let currentCategory = "";
+
   return template`<html>
 
   <head>
@@ -229,9 +231,22 @@ export default function render(request: Request, bcd): Response {
         </tr>
       </thead>
       <tbody>
-        ${stableFeatures.map(feature => template`<tr>
-          <td>${feature.api}</td><td>${helper.getBrowserName(feature.firstBrowser)}</td><td>${feature.firstDate.toLocaleDateString()}</td>
-          <td>${helper.getBrowserName(feature.lastBrowser)}</td><td>${feature.lastDate.toLocaleDateString()}</td><td>${feature.ageInDays}</td></tr>`)}
+        ${stableFeatures.map(feature => {
+            let response;
+            if (currentCategory != feature.category) {
+              response = template`<tr><th colspan=0>${feature.category}</th></tr>`
+            }
+            else {
+              response = template`<tr>
+                  <td>${feature.api}</td><td>${helper.getBrowserName(feature.firstBrowser)}</td><td>${feature.firstDate.toLocaleDateString()}</td>
+                  <td>${helper.getBrowserName(feature.lastBrowser)}</td><td>${feature.lastDate.toLocaleDateString()}</td><td>${feature.ageInDays}</td></tr>`
+            }
+
+            currentCategory = feature.category;
+
+            return response;
+          }
+        )}
       </tbody>
     </table>
     <footer><p>Using BCD version: ${__meta.version}, generated on ${__meta.timestamp}</p></footer>
