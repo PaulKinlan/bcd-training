@@ -121,8 +121,14 @@ export default function render(request: Request, bcd): Response {
   const selectedBrowsers = parseSelectedBrowsers(request);
   const selectedFeatures = parseSelectedFeatures(request);
 
+  console.log(selectedFeatures, "selectedFeatures")
+
   // only show the features selected.
-  const filteredData = Object.fromEntries(Object.entries(bcd).filter(([key]) => key in featureConfig));
+  const filteredData = Object.fromEntries(Object.entries(bcd).filter(([key]) => selectedFeatures.has(key)));
+
+  console.log(filteredData.keys(), "filteredData")
+
+
 
   const stableFeatures = getStableFeatures(browsers, selectedBrowsers, filteredData);
 
