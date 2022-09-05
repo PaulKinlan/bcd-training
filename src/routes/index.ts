@@ -41,11 +41,18 @@ const parseSelectedFeatures = (request: Request) => {
 
 function* itterateFeatures(data, parent = "", root = "") {
   for (let [topLevelAPI, information] of Object.entries(data)) {
-    console.log(topLevelAPI, parent, root)
+    if (topLevelAPI.startsWith("__")) {
+      continue;
+    }
+    
+    console.log(topLevelAPI, parent, root);
+
+    let newRoot;
+
     let namespaceAPI = "";
     if (root == "") {
       // We are at the root
-      root = topLevelAPI;
+      newRoot = topLevelAPI;
       namespaceAPI = "";
     }
     else {
@@ -57,13 +64,9 @@ function* itterateFeatures(data, parent = "", root = "") {
       }
     }
 
-    if (topLevelAPI.startsWith("__")) {
-      continue;
-    }
-
-    yield [namespaceAPI, information, root];
+    yield [namespaceAPI, information, newRoot];
     // Recurse
-    yield* itterateFeatures(information, namespaceAPI, root);
+    yield* itterateFeatures(information, namespaceAPI, newRoot);
   }
 }
 
