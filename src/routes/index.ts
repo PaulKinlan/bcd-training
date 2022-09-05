@@ -212,7 +212,7 @@ export default function render(request: Request, bcd): Response {
     <h3>Summary</h3>
     
     <table class=tabular>
-      <caption>First in A / Last in B</caption>
+      <caption>A count of the number of APIs that landed in A first and B last.</caption>
       <thead>
         <tr>
           <th></th>
