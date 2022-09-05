@@ -145,7 +145,7 @@ export default function render(request: Request, bcd): Response {
 
   const stableFeatures = getStableFeatures(browsers, selectedBrowsers, filteredData);
 
-  const tablulateSummar = generateCrossTab(stableFeatures);
+  const tablulateSummary = generateCrossTab(stableFeatures);
 
   console.log(tablulateSummary);
 
