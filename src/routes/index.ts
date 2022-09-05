@@ -96,20 +96,39 @@ const getStableFeatures = (browsers, mustBeIn: Set, data) => {
       const [earliest, latest] = [dates[0], dates[dates.length - 1]];
       const age = latest.added - earliest.added;
       const ageInDays = age / (1000 * 60 * 60 * 24);
-      output.push([
+      output.push([{
         isStable,
         api,
-        earliest.added,
-        earliest.browser,
-        latest.added,
-        latest.browser,
+        earliestDate: earliest.added,
+        earliestBrowser: earliest.browser,
+        latestDate: latest.added,
+        latestBrowser: latest.browser,
         age,
         ageInDays,
+      }
       ]);
     }
   }
   return output;
 }
+
+const generateCrossTab = (stableFeatures) => {
+
+  const output = {};
+
+  for(const feature in stableFeatures) {
+    if (feature.earliestBrowser in output == false) {
+      output[feature.earliestBrowser] = {};
+    }
+
+    if (feature.latestBrowser in output[feature.earliestBrowser] == false) {
+      output[feature.earliestBrowser][latestBrowser] = 0;
+    }
+
+    output[feature.earliestBrowser][latestBrowser]++;
+  }
+  return output;
+};
 
 export default function render(request: Request, bcd): Response {
 
@@ -126,6 +145,10 @@ export default function render(request: Request, bcd): Response {
 
   const stableFeatures = getStableFeatures(browsers, selectedBrowsers, filteredData);
 
+  const tablulateSummar = generateCrossTab(stableFeatures);
+
+  console.log(tablulateSummary);
+
   // Formatter that we will use a couple of times.
   const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
 
@@ -141,6 +164,7 @@ export default function render(request: Request, bcd): Response {
 
   table {
     table-layout:fixed;
+    width: 100%;
   }
 
   </style>
@@ -164,6 +188,28 @@ export default function render(request: Request, bcd): Response {
     <p>Below is a list of features that are in ${formatter.format(helper.getBrowserNames(selectedBrowsers))}</p>
     <h3>Summary</h3>
 
+    <table>
+      <caption>Superheros and sidekicks</caption>
+      <colgroup>
+        <col>
+        <col span="2" class="batman">
+        <col span="2" class="flash">
+      </colgroup>
+      <tr>
+          <td> </td>
+          <th scope="col">Batman</th>
+          <th scope="col">Robin</th>
+          <th scope="col">The Flash</th>
+          <th scope="col">Kid Flash</th>
+      </tr>
+      <tr>
+          <th scope="row">Skill</th>
+          <td>Smarts</td>
+          <td>Dex, acrobat</td>
+          <td>Super speed</td>
+          <td>Super speed</td>
+      </tr>
+    </table>
 
     <h3>Raw Data</h3>
     <table>
@@ -176,9 +222,9 @@ export default function render(request: Request, bcd): Response {
         <td>Days</td>
       </thead>
       <tbody>
-        ${ stableFeatures.map(feature => template`<tr>
-          <td>${feature[1]}</td><td>${feature[3]}</td><td>${feature[2]}</td>
-          <td>${feature[5]}</td><td>${feature[4]}</td><td>${feature[7]}</td></tr>`) }
+        ${stableFeatures.map(feature => template`<tr>
+          <td>${feature.api}</td><td>${feature.earliestBrowser}</td><td>${feature.earliestDate}</td>
+          <td>${feature.latestBrowser}</td><td>${feature.latestDate}</td><td>${feature.ageInDays}</td></tr>`)}
       </tbody>
     </table>
     <footer><p>Using BCD version: ${__meta.version}, generated on ${__meta.timestamp}</p></footer>
