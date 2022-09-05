@@ -157,7 +157,7 @@ export default function render(request: Request, bcd): Response {
 
   <head>
 	<title>Time to...</title>
-	<link rel="stylesheet" href="/styles/default.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
 	<meta name="author" content="Paul Kinlan">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 	<link rel="author" href="https://paul.kinlan.me/">
