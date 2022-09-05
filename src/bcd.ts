@@ -1,3 +1,30 @@
+
+function* itterateFeatures(data, parent = "", root = "") {
+  for (let [topLevelAPI, information] of Object.entries(data)) {
+    if (topLevelAPI.startsWith("__")) {
+      continue;
+    }
+    let newRoot = (root == "") ? topLevelAPI : root;
+
+    let namespaceAPI = "";
+    if (root == "") {
+      namespaceAPI = "";
+    }
+    else {
+      if (parent == "") {
+        namespaceAPI = topLevelAPI;
+      }
+      else {
+        namespaceAPI = `${parent}.${topLevelAPI}`;
+      }
+    }
+
+    yield [namespaceAPI, information, newRoot];
+    // Recurse
+    yield* itterateFeatures(information, namespaceAPI, newRoot);
+  }
+}
+
 export const getStableFeatures = (browsers, mustBeIn: Set, data) => {
   const output = [];
   for (let [api, compat, root] of itterateFeatures(data)) {

@@ -40,33 +40,6 @@ const parseSelectedFeatures = (request: Request) : Set<string> => {
   return new Set([...url.searchParams.keys()].filter(key => key.startsWith('feature-')).map(key => key.replace('feature-', '')));
 };
 
-function* itterateFeatures(data, parent = "", root = "") {
-  for (let [topLevelAPI, information] of Object.entries(data)) {
-    if (topLevelAPI.startsWith("__")) {
-      continue;
-    }
-    let newRoot = (root == "") ? topLevelAPI : root;
-
-    let namespaceAPI = "";
-    if (root == "") {
-      namespaceAPI = "";
-    }
-    else {
-      if (parent == "") {
-        namespaceAPI = topLevelAPI;
-      }
-      else {
-        namespaceAPI = `${parent}.${topLevelAPI}`;
-      }
-    }
-
-    yield [namespaceAPI, information, newRoot];
-    // Recurse
-    yield* itterateFeatures(information, namespaceAPI, newRoot);
-  }
-}
-
-
 export default function render(request: Request, bcd): Response {
 
   const { __meta, browsers, api, css, html, javascript } = bcd;
