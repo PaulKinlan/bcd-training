@@ -82,6 +82,7 @@ const getStableFeatures = (browsers, mustBeIn: Set, data) => {
 
         if (
           "version_added" in support &&
+          ("flags" in support == false) && // Flagged API's are not stable.
           support.version_added !== false &&
           support.version_added != null &&
           support.version_added !== true &&
