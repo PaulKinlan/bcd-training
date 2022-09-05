@@ -8,6 +8,7 @@ import { Route } from "./src/types.ts";
 import { StripStream } from "./src/stream-utils.ts";
 
 import index from "./src/routes/index.ts";
+import when from "./src/routes/when.ts";
 
 
 // Init
@@ -53,6 +54,12 @@ serve((req: Request) => {
       new URLPattern({ pathname: "/" }),
       (request) => {
         return index(request, bcd);
+      }
+    ],
+    [
+      new URLPattern({ pathname: "/when-stable" }),
+      (request) => {
+        return when(request, bcd);
       }
     ],
     // Fall through.
