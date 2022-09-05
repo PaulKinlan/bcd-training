@@ -115,7 +115,7 @@ const getStableFeatures = (browsers, mustBeIn: Set, data) => {
   return output;
 }
 
-const generateCrossTab = (stableFeatures) => {
+const generateFirstInLastInCrossTab = (stableFeatures) => {
 
   const output = {};
 
@@ -148,7 +148,7 @@ export default function render(request: Request, bcd): Response {
 
   const stableFeatures = getStableFeatures(browsers, selectedBrowsers, filteredData);
 
-  const tablulateSummary = generateCrossTab(stableFeatures);
+  const tablulateSummary = generateFirstInLastInCrossTab(stableFeatures);
 
   // Formatter that we will use a couple of times.
   const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
