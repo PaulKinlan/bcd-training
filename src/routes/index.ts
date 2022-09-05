@@ -122,6 +122,13 @@ export default function render(request: Request, bcd): Response {
 	<meta name="author" content="Paul Kinlan">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 	<link rel="author" href="https://paul.kinlan.me/">
+  <style>
+
+  table {
+    layout:fixed;
+  }
+
+  </style>
   </head>
   <body>
 
@@ -132,7 +139,9 @@ export default function render(request: Request, bcd): Response {
       </fieldset>
       <fieldset>
         <legend>Features</legend>
-        <input type=checkbox name=api id=api value=api> <label for=api>JS</label>
+        <input type=checkbox name=html id=html value=html> <label for=javascript>HTML</label>
+        <input type=checkbox name=javascript id=javascript value=javascript> <label for=javascript>JavaScript</label>
+        <input type=checkbox name=api id=api value=api> <label for=api>DOM API</label>
         <input type=checkbox name=css id=css value=css> <label for=api>CSS</label>
       </fieldset>
       <input type=reset>
@@ -141,6 +150,10 @@ export default function render(request: Request, bcd): Response {
 
     <h2>Stable APIs</h2>
     <p>Below is a list of features that are in ${formatter.format(getSelectedBrowserNames(browsers, selectedBrowsers))}</p>
+    <h3>Summary</h3>
+
+
+    <h3>Raw Data</h3>
     <table>
       <thead>
         <td>API</td>
