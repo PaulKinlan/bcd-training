@@ -115,8 +115,7 @@ const generateCrossTab = (stableFeatures) => {
 
   const output = {};
 
-  for(const feature in stableFeatures) {
-    console.log(feature)
+  for(const feature of stableFeatures) {
     if (feature.firstBrowser in output == false) {
       output[feature.firstBrowser] = {};
     }
