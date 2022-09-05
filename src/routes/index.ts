@@ -55,7 +55,7 @@ function* itterateFeatures(data, parent = "", root = "") {
       continue;
     }
 
-    yield [namespaceAPI, information, topLevelAPI];
+    yield [namespaceAPI, information, topLevelAPI, root];
     // Recurse
     yield* itterateFeatures(information, namespaceAPI, root);
   }
