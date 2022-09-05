@@ -92,8 +92,8 @@ export default function render(request: Request, bcd): Response {
     </header>
     <nav>
       <ol>
-          <li><a href="/">Home</a></li>
-          <li><a href="/when-stable">Stable</a></li>
+          <li><a href="/">Time to Stable</a></li>
+          <li><a href="/when-stable">Now Stable</a></li>
       </ol>
     </nav>
     <form method=GET action="/when-stable" >
