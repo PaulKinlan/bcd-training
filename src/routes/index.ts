@@ -224,29 +224,29 @@ export default function render(request: Request, bcd): Response {
 
     <h3>Raw Data</h3>
     ${[...selectedFeatures].map(feature => template`<a href="#${feature}-table>${feature}</a> `)}
-   ${stableFeatures.map(feature => {
+    ${stableFeatures.map(feature => {
     let response;
     if (currentCategory != feature.category) {
       response = template`
-        ${(currentCategory == "") ? "" : "</tbody></table>" }
-        <h4>${feature.category} Data</h4>
-        <table id="${feature.category}-table">
-        <thead>
-          <tr>
-            <th>API</th>
-            <th>First Browser</th>
-            <th>Date</th>
-            <th>Last Browser</th>
-            <th>Date</th>
-            <th>Days</th>
-          </tr>
-        </thead>
-        <tbody>`
+          ${(currentCategory == "") ? "" : "</tbody></table>"}
+          <h4>${feature.category} Data</h4>
+          <table id="${feature.category}-table">
+          <thead>
+            <tr>
+              <th>API</th>
+              <th>First Browser</th>
+              <th>Date</th>
+              <th>Last Browser</th>
+              <th>Date</th>
+              <th>Days</th>
+            </tr>
+          </thead>
+          <tbody>`
     }
     else {
       response = template`<tr>
-        <td>${feature.api}</td><td>${helper.getBrowserName(feature.firstBrowser)}</td><td>${feature.firstDate.toLocaleDateString()}</td>
-        <td>${helper.getBrowserName(feature.lastBrowser)}</td><td>${feature.lastDate.toLocaleDateString()}</td><td>${feature.ageInDays}</td></tr>`
+          <td>${feature.api}</td><td>${helper.getBrowserName(feature.firstBrowser)}</td><td>${feature.firstDate.toLocaleDateString()}</td>
+          <td>${helper.getBrowserName(feature.lastBrowser)}</td><td>${feature.lastDate.toLocaleDateString()}</td><td>${feature.ageInDays}</td></tr>`
     }
 
     currentCategory = feature.category;
