@@ -56,6 +56,7 @@ function* itterateFeatures(data, parent = "", root = "") {
       namespaceAPI = "";
     }
     else {
+      newRoot = root;
       if (parent == "") {
         namespaceAPI = topLevelAPI;
       }
