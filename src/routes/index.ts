@@ -83,6 +83,8 @@ export default function render(request: Request, bcd): Response {
 
   let currentCategory = "";
 
+  console.log(selectedBrowsers)
+
   return template`<html>
 
   <head>
