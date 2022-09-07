@@ -83,10 +83,6 @@ export default function render(request: Request, bcd): Response {
 
   let currentCategory = "";
 
-  console.log(selectedBrowsers)
-  console.log(stableFeatures)
-  console.log(tablulateSummary)
-
   return template`<html>
 
   <head>

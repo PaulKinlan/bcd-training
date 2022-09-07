@@ -27,7 +27,6 @@ function* itterateFeatures(data, parent = "", root = "") {
 
 export const getStableFeatures = (browsers, mustBeIn: Set, data) => {
   const output = [];
-  console.log(browsers, mustBeIn, data)
   for (let [api, compat, root] of itterateFeatures(data)) {
     if ("__compat" in compat) {
       const dates = [];
@@ -35,7 +34,6 @@ export const getStableFeatures = (browsers, mustBeIn: Set, data) => {
       let isStable = false;
       let { mdn_url } = compat.__compat;
       for (let [browser, support] of Object.entries(compat.__compat.support)) {
-        console.log(browser, support)
         if (mustBeIn.has(browser) == false) continue; // skip if we are not looking for this browser
 
         if ("version_added" in support === false && Array.isArray(support)) {
