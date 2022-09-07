@@ -84,6 +84,7 @@ export default function render(request: Request, bcd): Response {
   let currentCategory = "";
 
   console.log(selectedBrowsers)
+  console.log(tablulateSummary)
 
   return template`<html>
 
