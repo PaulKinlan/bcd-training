@@ -34,13 +34,13 @@ export const getStableFeatures = (browsers, mustBeIn: Set, data) => {
       let isStable = false;
       let { mdn_url } = compat.__compat;
       for (let [browser, support] of Object.entries(compat.__compat.support)) {
+        console.log(browser, support)
         if (mustBeIn.has(browser) == false) continue; // skip if we are not looking for this browser
 
         if ("version_added" in support === false && Array.isArray(support)) {
           support = support[0] // Smash in the first answer for now.
         }
 
-        console.log(support)
 
         if (
           "version_added" in support &&
