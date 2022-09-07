@@ -40,6 +40,8 @@ export const getStableFeatures = (browsers, mustBeIn: Set, data) => {
           support = support[0] // Smash in the first answer for now.
         }
 
+        console.log(support)
+
         if (
           "version_added" in support &&
           ("flags" in support == false) && // Flagged API's are not stable.
@@ -57,8 +59,6 @@ export const getStableFeatures = (browsers, mustBeIn: Set, data) => {
           }
 
           const dateAddedInBrowser = browsers[browserKey].releases[support.version_added].release_date
-
-          console.log(browser, dateAddedInBrowser)
 
           if (!!dateAddedInBrowser) {
             // Only add if there is a releaes date, this captures Betas (i.e, Safari)
