@@ -58,6 +58,8 @@ export const getStableFeatures = (browsers, mustBeIn: Set, data) => {
 
           const dateAddedInBrowser = browsers[browserKey].releases[support.version_added].release_date
 
+          console.log(browser, dateAddedInBrowser)
+
           if (!!dateAddedInBrowser) {
             // Only add if there is a releaes date, this captures Betas (i.e, Safari)
             dates.push({ browser: browser, added: new Date(dateAddedInBrowser) });
