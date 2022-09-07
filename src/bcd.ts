@@ -27,6 +27,7 @@ function* itterateFeatures(data, parent = "", root = "") {
 
 export const getStableFeatures = (browsers, mustBeIn: Set, data) => {
   const output = [];
+  console.log(browsers, mustBeIn, data)
   for (let [api, compat, root] of itterateFeatures(data)) {
     if ("__compat" in compat) {
       const dates = [];
