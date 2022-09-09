@@ -98,6 +98,7 @@ export default function render(request: Request, bcd): Response {
       </ol>
     </nav>
     <p>"New on the Web": For a given set of browsers, what APIs became stable and when, ordered reverse chronologically.</p>
+    <p>It's a great source of information for posts like <a href="https://web.dev/tags/new-to-the-web/">this</a></p>
     <form method=GET action="/when-stable">
       ${renderWarnings(warnings)}
       <fieldset>
