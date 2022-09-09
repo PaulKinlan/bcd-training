@@ -171,6 +171,7 @@ export default function render(request: Request, bcd): Response {
           <li><a href="/when-stable">Now Stable</a></li>
       </ol>
     </nav>
+    <p>For a given set of browsers, what APIs are available in all of them and how long did it take to become "stable".</p>
     <form method=GET action="/" >
       ${renderWarnings(warnings)}
       <fieldset>

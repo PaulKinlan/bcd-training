@@ -97,6 +97,7 @@ export default function render(request: Request, bcd): Response {
           <li><a href="/when-stable">Now Stable</a></li>
       </ol>
     </nav>
+    <p>"New on the Web": For a given set of browsers, what APIs became stable and when, ordered reverse chronologically.</p>
     <form method=GET action="/when-stable">
       ${renderWarnings(warnings)}
       <fieldset>
