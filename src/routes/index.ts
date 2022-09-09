@@ -1,25 +1,6 @@
 import template from "../flora.ts";
 import { getStableFeatures } from "../bcd.ts";
-
-class Browsers {
-  #browsers;
-  constructor(browsers) {
-    this.#browsers = browsers;
-  }
-
-  getBrowserReleaseDate = (browser, version): Set => {
-    // need to do something with "mirror"
-    return this.#browsers[browser].releases[version].release_date;
-  }
-
-  getBrowserName = (browser) => {
-    return this.#browsers[browser].name;
-  }
-
-  getBrowserNames = (selectedBrowsers: Set) => {
-    return [...selectedBrowsers.keys()].map(browser => this.#browsers[browser].name);
-  }
-}
+import Browsers from "../browser.ts";
 
 const renderBrowsers = (browsers, selectedBrowsers: Set) => {
   return template`${Object.entries(browsers).map(([browser, details]) => template`<input type=checkbox name="browser-${browser}" id="browser-${browser}" ${selectedBrowsers.has(browser) ? template`checked=checked` : template``}>
@@ -41,7 +22,6 @@ const parseSelectedFeatures = (request: Request) => {
   return new Set([...url.searchParams.keys()].filter(key => key.startsWith('feature-')).map(key => key.replace('feature-', '')));
 };
 
-
 const generateFirstInLastInCrossTab = (stableFeatures) => {
 
   const output = {};
@@ -60,15 +40,13 @@ const generateFirstInLastInCrossTab = (stableFeatures) => {
   return output;
 };
 
-export default function render(request: Request, bcd): Response {
+const renderWarnings = (warnings: Array<string>): template => {
+  return template`<span class="warning"><ul>${warnings.map(warning => template`<li>${warning}</li>`)}</ul></span>`;
+};
 
-  const { __meta, browsers, api, css, html, javascript } = bcd;
-  const featureConfig = { 'api': { name: "DOM API" }, 'css': { name: "CSS" }, 'html': { name: "HTML" }, 'javascript': { name: "JavaScript" } };
+const renderResults = (bcd, browsers, helper, browserList, selectedBrowsers: Set<String>, selectedFeatures: Set<String>, featureConfig): template => {
 
-  const helper = new Browsers(browsers);
-
-  const selectedBrowsers = parseSelectedBrowsers(request);
-  const selectedFeatures = parseSelectedFeatures(request);
+  let currentCategory = "";
 
   // only show the features selected.
   const filteredData = Object.fromEntries(Object.entries(bcd).filter(([key]) => selectedFeatures.has(key)));
@@ -77,11 +55,88 @@ export default function render(request: Request, bcd): Response {
 
   const tablulateSummary = generateFirstInLastInCrossTab(stableFeatures);
 
+  return template`<h2>Stable APIs</h2>
+  <p>Below is a list of features that are in ${browserList}</p>
+  <h3>Summary</h3>
+  
+  <table class=tabular>
+    <caption>A count of the number of APIs that landed in A first and B last.</caption>
+    <thead>
+      <tr>
+        <th></th>
+        ${[...selectedBrowsers].map(key => template`<th>Last in ${helper.getBrowserName(key)}</th>`)} 
+      </tr>
+    </thead>
+    <tbody>
+      ${[...selectedBrowsers].map((firstInKey) => template`<tr>
+        <th scope="row">First in ${helper.getBrowserName(firstInKey)}</th>
+        ${[...selectedBrowsers].map((lastInKey) => template`<td>${tablulateSummary[firstInKey][lastInKey]}</td>`)}
+        </tr>`)} 
+    </tbody>
+  </table>
+
+  <h3>Raw Data</h3>
+  Quick Links: <ul>${[...selectedFeatures].map(feature => template`<li><a href="#${feature}-table">${featureConfig[feature].name}</a></li>`)}</ul>
+  ${stableFeatures.map(feature => {
+    let response;
+    let heading;
+    if (currentCategory != feature.category) {
+      heading = template`
+        ${(currentCategory == "") ? "" : "</tbody></table>"}
+        <h4>${featureConfig[feature.category].name} Data</h4>
+        <table id="${feature.category}-table">
+        <thead>
+          <tr>
+            <th>API</th>
+            <th>First Browser</th>
+            <th>Date</th>
+            <th>Last Browser</th>
+            <th>Date</th>
+            <th>Days</th>
+          </tr>
+        </thead>
+        <tbody>`
+    }
+
+    response = template`${(heading != undefined) ? heading : ""}<tr>
+    <td><a href="${feature.mdn_url}">${feature.api}</a></td><td>${helper.getBrowserName(feature.firstBrowser)}</td><td>${feature.firstDate.toLocaleDateString()}</td>
+    <td>${helper.getBrowserName(feature.lastBrowser)}</td><td>${feature.lastDate.toLocaleDateString()}</td><td>${feature.ageInDays}</td></tr>`
+
+    currentCategory = feature.category;
+
+    return response;
+  }
+  )}
+ </tbody>
+</table>`;
+};
+
+export default function render(request: Request, bcd): Response {
+
+  const url = new URL(request.url);
+  const { __meta, browsers, api, css, html, javascript } = bcd;
+  const featureConfig = { 'api': { name: "DOM API" }, 'css': { name: "CSS" }, 'html': { name: "HTML" }, 'javascript': { name: "JavaScript" } };
+
+  let warnings = new Array<string>();
+
+  const helper = new Browsers(browsers);
+
+  const selectedBrowsers = parseSelectedBrowsers(request);
+  const selectedFeatures = parseSelectedFeatures(request);
+
+  let submitted = url.href.indexOf("?") > -1; // Likely submitted from form with nothing selected.
+
+  if (selectedBrowsers.size < 2 && submitted) {
+    warnings.push("Choose at least two browsers to compare");
+  }
+
+  if (selectedFeatures.size < 1 && submitted) {
+    warnings.push("Choose at least one feature to show");
+  }
+
   // Formatter that we will use a couple of times.
   const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
   let browserList = formatter.format(helper.getBrowserNames(selectedBrowsers));
-
-  let currentCategory = "";
 
   return template`<html>
 
@@ -100,7 +155,9 @@ export default function render(request: Request, bcd): Response {
     width: 100%;
   }
 
-  table.features {}
+  form span.warning {
+    color: red;
+  }
 
   </style>
   </head>
@@ -115,6 +172,7 @@ export default function render(request: Request, bcd): Response {
       </ol>
     </nav>
     <form method=GET action="/" >
+      ${renderWarnings(warnings)}
       <fieldset>
         <legend>Browsers</legend>
         ${renderBrowsers(browsers, selectedBrowsers)}
@@ -127,60 +185,7 @@ export default function render(request: Request, bcd): Response {
       <input type=submit>
     </form>
 
-    <h2>Stable APIs</h2>
-    <p>Below is a list of features that are in ${browserList}</p>
-    <h3>Summary</h3>
-    
-    <table class=tabular>
-      <caption>A count of the number of APIs that landed in A first and B last.</caption>
-      <thead>
-        <tr>
-          <th></th>
-          ${[...selectedBrowsers].map(key => template`<th>Last in ${helper.getBrowserName(key)}</th>`)} 
-        </tr>
-      </thead>
-      <tbody>
-        ${[...selectedBrowsers].map((firstInKey) => template`<tr>
-          <th scope="row">First in ${helper.getBrowserName(firstInKey)}</th>
-          ${[...selectedBrowsers].map((lastInKey) => template`<td>${tablulateSummary[firstInKey][lastInKey]}</td>`)}
-          </tr>`)} 
-      </tbody>
-    </table>
-
-    <h3>Raw Data</h3>
-    Quick Links: <ul>${[...selectedFeatures].map(feature => template`<li><a href="#${feature}-table">${feature}</a></li>`)}</ul>
-    ${stableFeatures.map(feature => {
-    let response;
-    let heading;
-    if (currentCategory != feature.category) {
-      heading = template`
-          ${(currentCategory == "") ? "" : "</tbody></table>"}
-          <h4>${feature.category} Data</h4>
-          <table id="${feature.category}-table">
-          <thead>
-            <tr>
-              <th>API</th>
-              <th>First Browser</th>
-              <th>Date</th>
-              <th>Last Browser</th>
-              <th>Date</th>
-              <th>Days</th>
-            </tr>
-          </thead>
-          <tbody>`
-    }
-
-    response = template`${(heading != undefined) ? heading : ""}<tr>
-      <td><a href="${feature.mdn_url}">${feature.api}</a></td><td>${helper.getBrowserName(feature.firstBrowser)}</td><td>${feature.firstDate.toLocaleDateString()}</td>
-      <td>${helper.getBrowserName(feature.lastBrowser)}</td><td>${feature.lastDate.toLocaleDateString()}</td><td>${feature.ageInDays}</td></tr>`
-
-    currentCategory = feature.category;
-
-    return response;
-  }
-  )}
-   </tbody>
-  </table>
+    ${(submitted && warnings.length == 0) ? renderResults(bcd, browsers, helper, browserList, selectedBrowsers, selectedFeatures, featureConfig) : ``}
      
     <footer><p>Using BCD version: ${__meta.version}, updated on ${__meta.timestamp}</p></footer>
 	</body>
