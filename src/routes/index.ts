@@ -188,8 +188,8 @@ export default function render(request: Request, bcd): Response {
 
     ${(submitted && warnings.length == 0) ? renderResults(bcd, browsers, helper, browserList, selectedBrowsers, selectedFeatures, featureConfig) : ``}
      
-    <footer><p>Using BCD version: ${__meta.version}, updated on ${__meta.timestamp}</p></footer>
-	</body>
+    <footer><p>Created by <a href="https://paul.kinlan.me">Paul Kinlan</a>. Using <a href="https://github.com/mdn/browser-compat-data">BCD</a> version: ${__meta.version}, updated on ${__meta.timestamp}</p></footer>
+    </body>
   </html>`
     .then(data => new Response(data, { status: 200, headers: { 'content-type': 'text/html' } }));
 };
