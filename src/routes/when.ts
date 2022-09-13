@@ -140,7 +140,7 @@ export default function render(request: Request, bcd): Response {
     }
 
     response = template`${(heading != undefined) ? heading : ""}<tr>
-        <td><a href="${feature.mdn_url}">${feature.api}</a> [<a href="${feature.spec_url}">📋</a>]</td><td>${helper.getBrowserName(feature.firstBrowser)}</td><td>${feature.firstDate.toLocaleDateString()}</td>
+        <td><a href="${feature.mdn_url}">${feature.api}</a> <a href="${feature.spec_url}" title="${feature.api} specification">📋</a></td><td>${helper.getBrowserName(feature.firstBrowser)}</td><td>${feature.firstDate.toLocaleDateString()}</td>
         <td>${helper.getBrowserName(feature.lastBrowser)}</td><td>${feature.lastDate.toLocaleDateString()}</td><td>${feature.ageInDays}</td></tr>`
 
     currentMonth = date;
