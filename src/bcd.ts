@@ -32,7 +32,7 @@ export const getStableFeatures = (browsers, mustBeIn: Set, data) => {
       const dates = [];
       const browserSupport = [];
       let isStable = false;
-      let { mdn_url } = compat.__compat;
+      let { mdn_url, spec_url } = compat.__compat;
       for (let [browser, support] of Object.entries(compat.__compat.support)) {
         if (mustBeIn.has(browser) == false) continue; // skip if we are not looking for this browser
 
