@@ -72,6 +72,7 @@ export default function render(request: Request, bcd): Response {
 	<meta name="author" content="Paul Kinlan">
   <meta name="description" content="A list of features that are considered stable for ${browserList}">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta charset="UTF-8">
 	<link rel="author" href="https://paul.kinlan.me/">
   <link rel="shortcut icon" href="/images/favicon.png">
   <style>

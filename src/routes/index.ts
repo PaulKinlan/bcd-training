@@ -144,6 +144,7 @@ export default function render(request: Request, bcd): Response {
 	<title>Time to Stable ${(browserList != "") ? `across ${browserList}` : ""}</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
 	<meta name="author" content="Paul Kinlan">
+  <meta charset="UTF-8">
   <meta name="description" content="A list of features that are considered stable for ${browserList} and when the landed in the first browser and the last">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <link rel="shortcut icon" href="/images/favicon.png">
