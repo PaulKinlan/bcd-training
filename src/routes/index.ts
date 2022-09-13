@@ -99,7 +99,7 @@ const renderResults = (bcd, browsers, helper, browserList, selectedBrowsers: Set
     }
 
     response = template`${(heading != undefined) ? heading : ""}<tr>
-    <td><a href="${feature.mdn_url}">${feature.api}</a> title="${feature.api} specification">📋</a></td><td>${helper.getBrowserName(feature.firstBrowser)}</td><td>${feature.firstDate.toLocaleDateString()}</td>
+    <td><a href="${feature.mdn_url}">${feature.api}</a> <a href="${feature.spec_url}" title="${feature.api} specification">📋</a></td><td>${helper.getBrowserName(feature.firstBrowser)}</td><td>${feature.firstDate.toLocaleDateString()}</td>
     <td>${helper.getBrowserName(feature.lastBrowser)}</td><td>${feature.lastDate.toLocaleDateString()}</td><td>${feature.ageInDays}</td></tr>`
 
     currentCategory = feature.category;
