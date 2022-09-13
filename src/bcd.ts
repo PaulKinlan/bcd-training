@@ -88,6 +88,7 @@ export const getStableFeatures = (browsers, mustBeIn: Set, data) => {
         isStable,
         category: root,
         mdn_url,
+        spec_url,
         api,
         firstDate: earliest.added,
         firstBrowser: earliest.browser,
