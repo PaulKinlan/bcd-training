@@ -44,7 +44,7 @@ const renderWarnings = (warnings: Array<string>): template => {
   return template`<span class="warning"><ul>${warnings.map(warning => template`<li>${warning}</li>`)}</ul></span>`;
 };
 
-const renderResults = (bcd, browsers, helper, browserList, selectedBrowsers: Set<String>, selectedFeatures: Set<String>, featureConfig): template => {
+const renderResults = (bcd, browsers, helper, browserList, selectedBrowsers: Set<string>, selectedFeatures: Set<string>, featureConfig): template => {
 
   let currentCategory = "";
 
@@ -114,17 +114,16 @@ const renderResults = (bcd, browsers, helper, browserList, selectedBrowsers: Set
 export default function render(request: Request, bcd): Response {
 
   const url = new URL(request.url);
-  const { __meta, browsers, api, css, html, javascript } = bcd;
+  const { __meta, browsers } = bcd;
   const featureConfig = { 'api': { name: "DOM API" }, 'css': { name: "CSS" }, 'html': { name: "HTML" }, 'javascript': { name: "JavaScript" } };
 
-  let warnings = new Array<string>();
-
+  const warnings = new Array<string>();
   const helper = new Browsers(browsers);
 
   const selectedBrowsers = parseSelectedBrowsers(request);
   const selectedFeatures = parseSelectedFeatures(request);
 
-  let submitted = url.href.indexOf("?") > -1; // Likely submitted from form with nothing selected.
+  const submitted = url.href.indexOf("?") > -1; // Likely submitted from form with nothing selected.
 
   if (selectedBrowsers.size < 2 && submitted) {
     warnings.push("Choose at least two browsers to compare");
@@ -136,7 +135,7 @@ export default function render(request: Request, bcd): Response {
 
   // Formatter that we will use a couple of times.
   const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
-  let browserList = formatter.format(helper.getBrowserNames(selectedBrowsers));
+  const browserList = formatter.format(helper.getBrowserNames(selectedBrowsers));
 
   return template`<html>
 
@@ -193,4 +192,4 @@ export default function render(request: Request, bcd): Response {
     </body>
   </html>`
     .then(data => new Response(data, { status: 200, headers: { 'content-type': 'text/html' } }));
-};
+}

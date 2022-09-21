@@ -56,7 +56,7 @@ export default async (strings, ...values): ReadableStream => {
       async function push() {
         let i = 0;
         while (i < values.length) {
-          let html = strings[i];
+          const html = strings[i];
           controller.enqueue(encoder.encode(html));
           await enqueueItem(values[i], controller);
 

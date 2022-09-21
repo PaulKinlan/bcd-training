@@ -48,7 +48,7 @@ const renderWarnings = (warnings: Array<string>): template => {
 
 export default function render(request: Request, bcd): Response {
   const url = new URL(request.url);
-  const { __meta, browsers, api, css, html, javascript } = bcd;
+  const { __meta, browsers } = bcd;
   const featureConfig = {
     "api": { name: "DOM API" },
     "css": { name: "CSS" },
@@ -56,14 +56,13 @@ export default function render(request: Request, bcd): Response {
     "javascript": { name: "JavaScript" },
   };
 
-  let warnings = new Array<string>();
-
+  const warnings = new Array<string>();
   const helper = new Browsers(browsers);
 
   const selectedBrowsers = parseSelectedBrowsers(request);
   const selectedFeatures = parseSelectedFeatures(request);
 
-  let submitted = url.href.indexOf("?") > -1; // Likely submitted from form with nothing selected.
+  const submitted = url.href.indexOf("?") > -1; // Likely submitted from form with nothing selected.
 
   if (selectedBrowsers.size < 2 && submitted) {
     warnings.push("Choose at least two browsers to compare");
@@ -92,7 +91,7 @@ export default function render(request: Request, bcd): Response {
     style: "long",
     type: "conjunction",
   });
-  let browserList = formatter.format(helper.getBrowserNames(selectedBrowsers));
+  const browserList = formatter.format(helper.getBrowserNames(selectedBrowsers));
 
   let currentMonth = "";
 

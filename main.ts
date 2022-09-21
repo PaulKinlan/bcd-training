@@ -7,7 +7,6 @@ import bcd from "https://esm.sh/@mdn/browser-compat-data@latest/data.json" asser
 };
 
 import { Route } from "./src/types.ts";
-import { StripStream } from "./src/stream-utils.ts";
 
 import index from "./src/routes/index.ts";
 import when from "./src/routes/when.ts";
@@ -20,7 +19,7 @@ delete bcd.svg;
 delete bcd.mathml;
 
 class StaticFileHandler {
-  #basePath: string = "";
+  #basePath = "";
 
   constructor(base: string) {
     this.#basePath = base;

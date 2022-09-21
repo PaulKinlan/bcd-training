@@ -1,9 +1,9 @@
 function* itterateFeatures(data, parent = "", root = "") {
-  for (let [topLevelAPI, information] of Object.entries(data)) {
+  for (const [topLevelAPI, information] of Object.entries(data)) {
     if (topLevelAPI.startsWith("__")) {
       continue;
     }
-    let newRoot = (root == "") ? topLevelAPI : root;
+    const newRoot = (root == "") ? topLevelAPI : root;
 
     let namespaceAPI = "";
     if (root == "") {
@@ -24,12 +24,12 @@ function* itterateFeatures(data, parent = "", root = "") {
 
 export const getStableFeatures = (browsers, mustBeIn: Set, data) => {
   const output = [];
-  for (let [api, compat, root] of itterateFeatures(data)) {
+  for (const [api, compat, root] of itterateFeatures(data)) {
     if ("__compat" in compat) {
       const dates = [];
       const browserSupport = [];
       let isStable = false;
-      let { mdn_url, spec_url } = compat.__compat;
+      const { mdn_url, spec_url } = compat.__compat;
       for (let [browser, support] of Object.entries(compat.__compat.support)) {
         if (mustBeIn.has(browser) == false) continue; // skip if we are not looking for this browser
 
