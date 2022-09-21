@@ -1,4 +1,3 @@
-
 function* itterateFeatures(data, parent = "", root = "") {
   for (let [topLevelAPI, information] of Object.entries(data)) {
     if (topLevelAPI.startsWith("__")) {
@@ -9,12 +8,10 @@ function* itterateFeatures(data, parent = "", root = "") {
     let namespaceAPI = "";
     if (root == "") {
       namespaceAPI = "";
-    }
-    else {
+    } else {
       if (parent == "") {
         namespaceAPI = topLevelAPI;
-      }
-      else {
+      } else {
         namespaceAPI = `${parent}.${topLevelAPI}`;
       }
     }
@@ -37,9 +34,8 @@ export const getStableFeatures = (browsers, mustBeIn: Set, data) => {
         if (mustBeIn.has(browser) == false) continue; // skip if we are not looking for this browser
 
         if ("version_added" in support === false && Array.isArray(support)) {
-          support = support[0] // Smash in the first answer for now.
+          support = support[0]; // Smash in the first answer for now.
         }
-
 
         if (
           "version_added" in support &&
@@ -50,23 +46,28 @@ export const getStableFeatures = (browsers, mustBeIn: Set, data) => {
           support.version_added != "preview" &&
           support.version_added.startsWith("≤") === false
         ) {
-
           let browserKey = browser;
 
           if (support.version_added == "mirror") {
             browserKey = browsers[browser].upstream;
           }
 
-          const dateAddedInBrowser = browsers[browserKey].releases[support.version_added].release_date
+          const dateAddedInBrowser =
+            browsers[browserKey].releases[support.version_added].release_date;
 
           if (!!dateAddedInBrowser) {
             // Only add if there is a releaes date, this captures Betas (i.e, Safari)
-            dates.push({ browser: browser, added: new Date(dateAddedInBrowser) });
+            dates.push({
+              browser: browser,
+              added: new Date(dateAddedInBrowser),
+            });
             browserSupport.push(browser);
           }
 
           // Only stable if in all 'mustBeIn'
-          if ([...mustBeIn].every((d) => browserSupport.indexOf(d) >= 0) == true) {
+          if (
+            [...mustBeIn].every((d) => browserSupport.indexOf(d) >= 0) == true
+          ) {
             isStable = true;
           }
         }
@@ -100,4 +101,4 @@ export const getStableFeatures = (browsers, mustBeIn: Set, data) => {
     }
   }
   return output;
-}
+};
