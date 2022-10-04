@@ -35,7 +35,7 @@ export default function render({ bcd, stableFeatures, browsers, browserList, sel
   <meta charset="UTF-8">
 	<link rel="author" href="https://paul.kinlan.me/">
   <link rel="shortcut icon" href="/images/favicon.png">
-  <link rel="alternate" href="/when-stable?${renderBrowsersQuery(browsers, selectedBrowsers)}&${renderFeaturesQuery(featureConfig, selectedFeatures)}&type=rss">
+  <link rel="alternate" type=”application/rss+xml” href="/when-stable?${renderBrowsersQuery(browsers, selectedBrowsers)}&${renderFeaturesQuery(featureConfig, selectedFeatures)}&type=rss">
   <style>
 
   table {
