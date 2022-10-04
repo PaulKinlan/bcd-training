@@ -1,15 +1,20 @@
-function* itterateFeatures(data, parent = "", root = "") {
+import { CompatStatement, Browsers, BrowserName, Identifier, SupportStatement } from "./types.d.ts";
+
+type Feature = [string, Identifier | CompatStatement, string | undefined]
+type BrowserDate = { browser: BrowserName, added: Date };
+
+function* itterateFeatures(data: Identifier | CompatStatement, parent?: string, root?: string): Generator<Feature> {
   for (const [topLevelAPI, information] of Object.entries(data)) {
     if (topLevelAPI.startsWith("__")) {
       continue;
     }
-    const newRoot = (root == "") ? topLevelAPI : root;
+    const newRoot: string | undefined | null = (root == "" || root == undefined) ? topLevelAPI : root;
 
     let namespaceAPI = "";
     if (root == "") {
       namespaceAPI = "";
     } else {
-      if (parent == "") {
+      if (parent == "" || parent == undefined) {
         namespaceAPI = topLevelAPI;
       } else {
         namespaceAPI = `${parent}.${topLevelAPI}`;
@@ -22,19 +27,23 @@ function* itterateFeatures(data, parent = "", root = "") {
   }
 }
 
-export const getStableFeatures = (browsers, mustBeIn: Set, data) => {
+export const getStableFeatures = (browsers: Browsers, mustBeIn: Set<BrowserName>, data: Identifier | CompatStatement) :[] => {
   const output = [];
   for (const [api, compat, root] of itterateFeatures(data)) {
     if ("__compat" in compat) {
-      const dates = [];
-      const browserSupport = [];
+      const dates: BrowserDate[] = [];
+      const browserSupport: BrowserName[] = [];
       let isStable = false;
-      const { mdn_url, spec_url } = compat.__compat;
-      for (let [browser, support] of Object.entries(compat.__compat.support)) {
+      const mdn_url = compat.__compat?.mdn_url;
+      const spec_url = compat.__compat?.spec_url;
+      let browser: keyof Partial<Record<BrowserName, SupportStatement>>;
+      for (browser in compat.__compat?.support) {
+        let support = compat.__compat?.support[browser];
+        if (support == undefined) continue;
         if (mustBeIn.has(browser) == false) continue; // skip if we are not looking for this browser
 
         if ("version_added" in support === false && Array.isArray(support)) {
-          support = support[0]; // Smash in the first answer for now.
+          support = support[0]; // Smash in the first answer for now becacuse it is the most recent.
         }
 
         if (
@@ -46,17 +55,19 @@ export const getStableFeatures = (browsers, mustBeIn: Set, data) => {
           support.version_added != "preview" &&
           support.version_added.startsWith("≤") === false
         ) {
-          let browserKey = browser;
+          let browserKey: BrowserName | undefined = browser;
 
           if (support.version_added == "mirror") {
             browserKey = browsers[browser].upstream;
           }
 
+          if (browserKey == undefined) continue; // Skip if there is an issue.
+
           const dateAddedInBrowser =
             browsers[browserKey].releases[support.version_added].release_date;
 
-          if (!!dateAddedInBrowser) {
-            // Only add if there is a releaes date, this captures Betas (i.e, Safari)
+          if (dateAddedInBrowser != undefined) {
+            // Only add if there is a release date, this captures Betas (i.e, Safari)
             dates.push({
               browser: browser,
               added: new Date(dateAddedInBrowser),

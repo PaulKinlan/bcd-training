@@ -1,4 +1,6 @@
 {
   "deno.enable": true,
-  "deno.unstable": true
+  "deno.unstable": true,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "typescript.updateImportsOnFileMove.enabled": "always"
 }
