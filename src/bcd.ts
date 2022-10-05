@@ -1,7 +1,8 @@
-import { CompatStatement, Browsers, BrowserName, Identifier, SupportStatement } from "./types.d.ts";
+import { CompatStatement, Browsers, BrowserName, Identifier, SupportStatement, CompatResult } from "./types.d.ts";
 
 type Feature = [string, Identifier | CompatStatement, string | undefined]
 type BrowserDate = { browser: BrowserName, added: Date };
+
 
 function* itterateFeatures(data: Identifier | CompatStatement, parent?: string, root?: string): Generator<Feature> {
   for (const [topLevelAPI, information] of Object.entries(data)) {
@@ -27,7 +28,7 @@ function* itterateFeatures(data: Identifier | CompatStatement, parent?: string, 
   }
 }
 
-export const getStableFeatures = (browsers: Browsers, mustBeIn: Set<BrowserName>, data: Identifier | CompatStatement) :[] => {
+export const getStableFeatures = (browsers: Browsers, mustBeIn: Set<BrowserName>, data: Identifier | CompatStatement): CompatResult[] => {
   const output = [];
   for (const [api, compat, root] of itterateFeatures(data)) {
     if ("__compat" in compat) {
@@ -96,7 +97,7 @@ export const getStableFeatures = (browsers: Browsers, mustBeIn: Set<BrowserName>
       const [earliest, latest] = [dates[0], dates[dates.length - 1]];
       const age = latest.added - earliest.added;
       const ageInDays = age / (1000 * 60 * 60 * 24);
-      output.push({
+      const newLocal: CompatResult = {
         isStable,
         category: root,
         mdn_url,
@@ -108,7 +109,8 @@ export const getStableFeatures = (browsers: Browsers, mustBeIn: Set<BrowserName>
         lastBrowser: latest.browser,
         age,
         ageInDays,
-      });
+      };
+      output.push(newLocal);
     }
   }
   return output;

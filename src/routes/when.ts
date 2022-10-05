@@ -13,7 +13,7 @@ const controllers = {
   'rss': rssRender
 }
 
-const featureConfig: FeatureConfig = { 'api': { name: "DOM API" }, 'css': { name: "CSS" }, 'html': { name: "HTML" }, 'javascript': { name: "JavaScript" } };
+const featureConfig: FeatureConfig = { 'api': { name: "DOM API" }, 'css': { name: "CSS" }, 'html': { name: "HTML" }, 'javascript': { name: "JS" } };
 
 export default function render(request: Request, bcd: CompatData): Response {
   const url = new URL(request.url);
