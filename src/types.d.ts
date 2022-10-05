@@ -14,4 +14,5 @@ export type CompatResult = {
   lastBrowser: BrowserName;
   age: number;
   ageInDays: number;
+  browserSupport: BrowserName[];
 };

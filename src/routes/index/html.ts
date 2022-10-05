@@ -5,6 +5,7 @@ import { FeatureConfig, WhenRender } from "../types.d.ts";
 import renderBrowsers from "../ui-components/browsers.ts";
 import renderFeatures from "../ui-components/features.ts";
 import renderWarnings from "../ui-components/warnings.ts";
+import renderNavigation from "../ui-components/nav.ts";
 
 type BrowserCrossTabResult = { [K in BrowserName]?: { [K in BrowserName]?: number } }
 
@@ -279,12 +280,7 @@ export default function render({ bcd, stableFeatures, submitted, browsers, brows
     <header>
       <h1>Time to Stable</h1>
     </header>
-    <nav>
-      <ol>
-          <li><a href="/">Time to Stable</a></li>
-          <li><a href="/when-stable">Now Stable</a></li>
-      </ol>
-    </nav>
+    ${renderNavigation()}
     <p>For a given set of browsers, what APIs are in all of them and how many days it take for the API to land in the first browser to the last.</p>
     <form method=GET action="/" >
       ${renderWarnings(warnings)}

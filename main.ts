@@ -6,6 +6,7 @@ import { contentType } from "https://deno.land/std@0.152.0/media_types/mod.ts";
 import bcd from "https://esm.sh/@mdn/browser-compat-data@latest";
 
 import index from "./src/routes/index.ts";
+import notStable from "./src/routes/not-stable.ts";
 import when from "./src/routes/when.ts";
 import { Route } from "./types/types.d.ts";
 // Init
@@ -57,6 +58,12 @@ serve((req: Request) => {
       new URLPattern({ pathname: "/" }),
       (request) => {
         return index(request, bcd);
+      },
+    ],
+    [
+      new URLPattern({ pathname: "/not-stable" }),
+      (request) => {
+        return notStable(request, bcd);
       },
     ],
     [

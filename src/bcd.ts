@@ -28,7 +28,10 @@ function* itterateFeatures(data: Identifier | CompatStatement, parent?: string, 
   }
 }
 
-export const getStableFeatures = (browsers: Browsers, mustBeIn: Set<BrowserName>, data: Identifier | CompatStatement): CompatResult[] => {
+/*
+ Gets Features that are not in preview and if they are stable or not.
+*/
+export const getFeatures = (browsers: Browsers, mustBeIn: Set<BrowserName>, data: Identifier | CompatStatement): CompatResult[] => {
   const output = [];
   for (const [api, compat, root] of itterateFeatures(data)) {
     if ("__compat" in compat) {
@@ -85,9 +88,7 @@ export const getStableFeatures = (browsers: Browsers, mustBeIn: Set<BrowserName>
         }
       }
 
-      if (isStable == false) continue; // Not stable, skip.
-
-      if (dates.length == 0) continue; // we cant work out if its in a a brower due to weird data.
+      if (dates.length == 0) continue; // we cant work out if its in a browser due to weird data.
 
       // Order the data so we can pick out the first and last.
       dates.sort(function (a, b) {
@@ -109,9 +110,18 @@ export const getStableFeatures = (browsers: Browsers, mustBeIn: Set<BrowserName>
         lastBrowser: latest.browser,
         age,
         ageInDays,
+        browserSupport
       };
       output.push(newLocal);
     }
   }
   return output;
+}
+
+/*
+  Gets only the stable features.
+*/
+export const getStableFeatures = (browsers: Browsers, mustBeIn: Set<BrowserName>, data: Identifier | CompatStatement): CompatResult[] => {
+  
+  return getFeatures(browsers, mustBeIn, data).filter(feature=> feature.isStable);
 };

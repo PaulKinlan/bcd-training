@@ -4,6 +4,7 @@ import { FeatureConfig, WhenRender } from "../types.d.ts";
 import renderBrowsers from "../ui-components/browsers.ts";
 import renderFeatures from "../ui-components/features.ts";
 import renderWarnings from "../ui-components/warnings.ts";
+import renderNavigation from "../ui-components/nav.ts";
 
 function renderBrowsersQuery(browsers: Browsers, selectedBrowsers: Set<BrowserName>): string {
   return Object.entries(browsers)
@@ -53,12 +54,7 @@ export default function render({ bcd, stableFeatures, browsers, browserList, sel
     <header>
       <h1>Now Stable</h1>
     </header>
-    <nav>
-      <ol>
-          <li><a href="/">Time to Stable</a></li>
-          <li><a href="/when-stable">Now Stable</a></li>
-      </ol>
-    </nav>
+    ${renderNavigation()}
     <p>"New on the Web": For a given set of browsers, what APIs became stable and when, ordered reverse chronologically.</p>
     <p>It's a great source of information for posts like <a href="https://web.dev/tags/new-to-the-web/">this</a></p>
     <form method=GET action="/when-stable">

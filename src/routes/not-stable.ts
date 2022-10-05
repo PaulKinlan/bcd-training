@@ -1,10 +1,10 @@
 import { CompatData } from "../types.d.ts";
-import { getStableFeatures } from "../bcd.ts";
+import { getFeatures, getStableFeatures } from "../bcd.ts";
 import BrowsersHelper from "../browser.ts";
 import { parseResponse, parseSelectedBrowsers, parseSelectedFeatures } from "./_utils/request.ts";
 import { FeatureConfig, WhenRender } from "./types.d.ts";
 
-import htmlRender from './index/html.ts';
+import htmlRender from './not-stable/html.ts';
 import _404Render from './errors/404.ts';
 
 const controllers = {
@@ -41,7 +41,7 @@ export default function render(request: Request, bcd: CompatData): Response {
 
   const filteredData = Object.fromEntries(Object.entries(bcd).filter(([key]) => selectedFeatures.has(key)));
 
-  const stableFeatures = getStableFeatures(browsers, selectedBrowsers, filteredData);
+  const stableFeatures = getFeatures(browsers, selectedBrowsers, filteredData).filter(feature=>feature.isStable == false);
 
   const data: WhenRender = {
     bcd,
