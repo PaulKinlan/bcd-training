@@ -9,15 +9,15 @@ import renderNavigation from "../ui-components/nav.ts";
 
 function generateCrossTab(features: CompatResult[], mustBeIn: BrowserName[]) {
 
-  const output: {[K in BrowserName]?: {[K in BrowserName]?: number}} = {};
-  type FeatureSupport = {[K in BrowserName]?: boolean};
+  const output: { [K in BrowserName]?: { [K in BrowserName]?: number } } = {};
+  type FeatureSupport = { [K in BrowserName]?: boolean };
 
   for (const feature of features) {
     const featureIn: BrowserName[] = [];
     const featureNotIn: BrowserName[] = [];
 
     for (const browser of mustBeIn) {
-      if( feature.browserSupport.includes(browser)) {
+      if (feature.browserSupport.includes(browser)) {
         featureIn.push(browser);
       }
       else {
@@ -25,10 +25,10 @@ function generateCrossTab(features: CompatResult[], mustBeIn: BrowserName[]) {
       }
     }
 
-    for(const browser of featureIn) {
+    for (const browser of featureIn) {
       if (browser in output == false) output[browser] = {};
 
-      for(const browserNotIn of featureNotIn) {
+      for (const browserNotIn of featureNotIn) {
         if (browserNotIn in output[browser] == false) output[browser][browserNotIn] = 0;
 
         output[browser][browserNotIn]++;
@@ -146,9 +146,9 @@ ${template`${Object.entries(averages.firstLanding).map(([year, categories]) => {
         </thead>
         <tbody>`;
     }
-
+    
     response = template`${(heading != undefined) ? heading : ""}<tr>
-    <td><a href="${feature.mdn_url}">${feature.api}</a> ${("spec_url" in feature) ? template`<a href="${feature.spec_url}" title="${feature.api} specification">📋</a>` : template``}</td><td>${helper.getBrowserName(feature.firstBrowser)}</td><td>${feature.firstDate.toLocaleDateString()}</td><td>${((Date.now() - feature.firstDate.getTime()) / (1000 * 24 * 60 * 60)).toFixed(0)}</td></tr>`;
+    <td>${("mdn_url" in feature && feature.mdn_url != undefined) ? `<a href="${feature.mdn_url}">${feature.api}</a>` : feature.api} ${("spec_url" in feature && feature.spec_url != undefined) ? template`<a href="${feature.spec_url}" title="${feature.api} specification">📋</a>` : template``}</td><td>${helper.getBrowserName(feature.firstBrowser)}</td><td>${feature.firstDate.toLocaleDateString()}</td><td>${((Date.now() - feature.firstDate.getTime()) / (1000 * 24 * 60 * 60)).toFixed(0)}</td></tr>`;
 
     currentCategory = feature.category;
 

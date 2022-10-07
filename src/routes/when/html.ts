@@ -9,14 +9,14 @@ import renderNavigation from "../ui-components/nav.ts";
 function renderBrowsersQuery(browsers: Browsers, selectedBrowsers: Set<BrowserName>): string {
   return Object.entries(browsers)
     .filter(([browser, details]) => selectedBrowsers.has(<BrowserName>browser))
-    .map(([browser, details])=> `browser-${browser}=on`)
+    .map(([browser, details]) => `browser-${browser}=on`)
     .join('&');
 }
 
 function renderFeaturesQuery(features: FeatureConfig, selectedFeatures: Set<string>): string {
   return Object.entries(features)
     .filter(([feature, details]) => selectedFeatures.has(feature))
-    .map(([feature, details])=> `feature-${feature}=on`)
+    .map(([feature, details]) => `feature-${feature}=on`)
     .join('&');
 }
 
@@ -93,7 +93,7 @@ export default function render({ bcd, stableFeatures, browsers, browserList, sel
         }
 
         response = template`${(heading != undefined) ? heading : ""}<tr>
-        <td><a href="${feature.mdn_url}">${feature.api}</a> ${("spec_url" in feature)
+        <td>${("mdn_url" in feature && feature.mdn_url != undefined) ? `<a href="${feature.mdn_url}">${feature.api}</a>` : feature.api} ${("spec_url" in feature && feature.spec_url != undefined)
             ? template`<a href="${feature.spec_url}" title="${feature.api} specification">📋</a>`
             : template``
           }</td><td>${helper.getBrowserName(feature.firstBrowser)
@@ -113,7 +113,7 @@ export default function render({ bcd, stableFeatures, browsers, browserList, sel
     <footer><p>Created by <a href="https://paul.kinlan.me">Paul Kinlan</a>. Using <a href="https://github.com/mdn/browser-compat-data">BCD</a> version: ${__meta.version}, updated on ${__meta.timestamp}</p></footer>
 	</body>
   </html>`.then((data) => new Response(data, {
-    status: 200,
-    headers: { "content-type": "text/html" }
-  }));
+      status: 200,
+      headers: { "content-type": "text/html" }
+    }));
 }

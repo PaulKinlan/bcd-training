@@ -160,21 +160,20 @@ ${template`${Object.entries(averages.firstLanding).map(([year, categories]) => {
       </tr>
       </thead>
     <tbody>
-${template`${
-  Object.entries(averages.firstBrowser).map(([year, browsers]) =>
-  template`
+${template`${Object.entries(averages.firstBrowser).map(([year, browsers]) =>
+    template`
     <tr>
       <th colspan="${(selectedFeatures.size * 2) + 1}" scope="colgroup">${year}</th>
     </tr>
-    ${template`${Object.entries(browsers).map(([browser, categories]) => 
+    ${template`${Object.entries(browsers).map(([browser, categories]) =>
       `<tr>
         <th>&nbsp;&nbsp;${helper.getBrowserName(browser)}</th>
-        ${[...selectedFeatures].map(category => 
-          `<td>${categories[category].featureCount}</td><td>${(categories[category].total / categories[category].featureCount).toFixed(2)}</td>`).join("")}
+        ${[...selectedFeatures].map(category =>
+        `<td>${categories[category].featureCount}</td><td>${(categories[category].total / categories[category].featureCount).toFixed(2)}</td>`).join("")}
       </tr>`
     )}`}
   `)// 
-}`}
+      }`}
     </tbody>
   </table>
 
@@ -190,21 +189,20 @@ ${template`${
       </tr>
       </thead>
     <tbody>
-${template`${
-  Object.entries(averages.lastBrowser).map(([year, browsers]) =>
-  template`
+${template`${Object.entries(averages.lastBrowser).map(([year, browsers]) =>
+        template`
     <tr>
       <th colspan="${(selectedFeatures.size * 2) + 1}" scope="colgroup">${year}</th>
     </tr>
-    ${template`${Object.entries(browsers).map(([browser, categories]) => 
-      `<tr>
+    ${template`${Object.entries(browsers).map(([browser, categories]) =>
+          `<tr>
         <th>&nbsp;&nbsp;${helper.getBrowserName(browser)}</th>
-        ${[...selectedFeatures].map(category => 
-          `<td>${categories[category].featureCount}</td><td>${(categories[category].total / categories[category].featureCount).toFixed(2)}</td>`).join("")}
+        ${[...selectedFeatures].map(category =>
+            `<td>${categories[category].featureCount}</td><td>${(categories[category].total / categories[category].featureCount).toFixed(2)}</td>`).join("")}
       </tr>`
-    )}`}
+        )}`}
   `)// 
-}`}
+      }`}
     </tbody>
   </table>
 
@@ -213,10 +211,10 @@ ${template`${
   <h3>Raw Data</h3>
   Quick Links: <ul>${[...selectedFeatures].map(selectedFeature => template`<li><a href="#${selectedFeature}-table">${featureConfig[selectedFeature].name}</a></li>`)}</ul>
   ${stableFeatures.map(feature => {
-    let response;
-    let heading;
-    if (currentCategory != feature.category) {
-      heading = template`
+        let response;
+        let heading;
+        if (currentCategory != feature.category) {
+          heading = template`
         ${(currentCategory == "") ? "" : "</tbody></table>"}
         <h4>${featureConfig[feature.category].name} Data</h4>
         <table id="${feature.category}-table">
@@ -231,17 +229,17 @@ ${template`${
           </tr>
         </thead>
         <tbody>`;
-    }
+        }
 
-    response = template`${(heading != undefined) ? heading : ""}<tr>
-    <td><a href="${feature.mdn_url}">${feature.api}</a> ${("spec_url" in feature) ? template`<a href="${feature.spec_url}" title="${feature.api} specification">📋</a>` : template``}</td><td>${helper.getBrowserName(feature.firstBrowser)}</td><td>${feature.firstDate.toLocaleDateString()}</td>
+        response = template`${(heading != undefined) ? heading : ""}<tr>
+    <td>${("mdn_url" in feature && feature.mdn_url != undefined) ? `<a href="${feature.mdn_url}">${feature.api}</a>` : feature.api} ${("spec_url" in feature && feature.spec_url != undefined) ? template`<a href="${feature.spec_url}" title="${feature.api} specification">📋</a>` : template``}</td><td>${helper.getBrowserName(feature.firstBrowser)}</td><td>${feature.firstDate.toLocaleDateString()}</td>
     <td>${helper.getBrowserName(feature.lastBrowser)}</td><td>${feature.lastDate.toLocaleDateString()}</td><td>${feature.ageInDays}</td></tr>`;
 
-    currentCategory = feature.category;
+        currentCategory = feature.category;
 
-    return response;
-  }
-  )}
+        return response;
+      }
+      )}
  </tbody>
 </table>`;
 
