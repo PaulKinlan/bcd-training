@@ -1,4 +1,4 @@
-import { CompatStatement, Browsers, BrowserName, Identifier, SupportStatement, CompatResult } from "./types.d.ts";
+import { CompatStatement, Browsers, BrowserName, Identifier, SupportStatement, CompatResult, SimpleSupportStatement } from "./types.d.ts";
 
 type Feature = [string, Identifier | CompatStatement, string | undefined]
 type BrowserDate = { browser: BrowserName, added: Date };
@@ -42,33 +42,49 @@ export const getFeatures = (browsers: Browsers, mustBeIn: Set<BrowserName>, data
       const spec_url = compat.__compat?.spec_url;
       let browser: keyof Partial<Record<BrowserName, SupportStatement>>;
       for (browser in compat.__compat?.support) {
-        let support = compat.__compat?.support[browser];
-        if (support == undefined) continue;
+        let supportStatment = compat.__compat?.support[browser];
+        let support: SimpleSupportStatement;
+        if (supportStatment == undefined) continue;
         if (mustBeIn.has(browser) == false) continue; // skip if we are not looking for this browser
 
-        if ("version_added" in support === false && Array.isArray(support)) {
-          support = support[0]; // Smash in the first answer for now becacuse it is the most recent.
+        if ("version_added" in supportStatment === false && Array.isArray(supportStatment)) {
+          support = supportStatment[0]; // Smash in the first answer for now because it is the most recent.
+        } else {
+          support = <SimpleSupportStatement>supportStatment;
+        }
+
+        let { version_added } = support;
+        if (typeof(version_added) === 'string' && version_added.startsWith("≤") === true) {
+          // Assume the value of "equal" and continue.
+          version_added = version_added.replace("≤","");
         }
 
         if (
-          "version_added" in support &&
-          ("flags" in support == false) && // Flagged API's are not stable.
-          support.version_added !== false &&
-          support.version_added != null &&
-          support.version_added !== true &&
-          support.version_added != "preview" &&
-          support.version_added.startsWith("≤") === false
+            version_added === true || (
+            ("flags" in support == false) && // Flagged API's are not stable.
+            support.version_added !== false &&
+            support.version_added != null &&
+            support.version_added != "preview")
         ) {
           let browserKey: BrowserName | undefined = browser;
-
-          if (support.version_added == "mirror") {
+        
+          if (version_added == "mirror") {
             browserKey = browsers[browser].upstream;
           }
 
-          if (browserKey == undefined) continue; // Skip if there is an issue.
+          if (browserKey == undefined) {
+            console.log(browserKey, support); // Log this case.
+            continue; // Skip if there is an issue.
+          }
+
+          if (version_added === true) {
+            // Get the first listed entry.
+            console.log("Browser Version 'True'", Object.keys(browsers[browserKey].releases)[0], api, browserKey);
+            version_added = Object.keys(browsers[browserKey].releases)[0];
+          }
 
           const dateAddedInBrowser =
-            browsers[browserKey].releases[support.version_added].release_date;
+            browsers[browserKey].releases[version_added].release_date;
 
           if (dateAddedInBrowser != undefined) {
             // Only add if there is a release date, this captures Betas (i.e, Safari)
@@ -122,6 +138,5 @@ export const getFeatures = (browsers: Browsers, mustBeIn: Set<BrowserName>, data
   Gets only the stable features.
 */
 export const getStableFeatures = (browsers: Browsers, mustBeIn: Set<BrowserName>, data: Identifier | CompatStatement): CompatResult[] => {
-  
-  return getFeatures(browsers, mustBeIn, data).filter(feature=> feature.isStable);
+  return getFeatures(browsers, mustBeIn, data).filter(feature => feature.isStable);
 };
