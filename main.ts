@@ -32,13 +32,13 @@ class StaticFileHandler {
       : pathname;
     const path = join(Deno.cwd(), this.#basePath, resolvedPathname);
     const file: Promise<Response> = Deno.readFile(path)
-      .then((data) : Response=>
+      .then((data): Response =>
         new Response(data, {
           status: 200,
           headers: { "content-type": contentType(extension) },
         })
       ) // Need to think about content tyoes.
-      .catch((_) : Response => new Response("Not found", { status: 404 }));
+      .catch((_): Response => new Response("Not found", { status: 404 }));
 
     return file;
   }
@@ -52,7 +52,7 @@ serve((req: Request) => {
   const url = req.url;
   const staticFiles = new StaticFileHandler("static");
   let response: Response | Promise<Response> = new Response("Not found", { status: 404 });
-    
+
   const routes: Array<Route> = [
     [
       new URLPattern({ pathname: "/" }),
