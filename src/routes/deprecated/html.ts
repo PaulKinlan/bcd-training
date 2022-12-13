@@ -14,7 +14,6 @@ function generateFirstInLastInCrossTab(features: CompatResult[]): BrowserCrossTa
   const output: BrowserCrossTabResult = {};
 
   for (const feature of features) {
-
     if (feature.stableStats.first.browser in output == false) {
       output[feature.stableStats.first.browser] = {};
     }
@@ -65,23 +64,21 @@ function generateAverage(features: CompatResult[]) {
         lastBrowser[year] = {};
       }
 
-      const {first, last} = feature.stableStats;
-
-      if (first.browser in firstBrowser[year] == false) {
-        firstBrowser[year][first.browser] = initApiCounts();
+      if (feature.stableStats.first.browser in firstBrowser[year] == false) {
+        firstBrowser[year][feature.stableStats.first.browser] = initApiCounts();
       }
 
-      if (last.browser in lastBrowser[year] == false) {
-        lastBrowser[year][last.browser] = initApiCounts();
+      if (feature.stableStats.last.browser in lastBrowser[year] == false) {
+        lastBrowser[year][feature.stableStats.last.browser] = initApiCounts();
       }
 
       firstLanding[year][feature.category].total += feature.stableStats.ageInDays;
       firstLanding[year][feature.category].featureCount++;
 
-      firstBrowser[year][first.browser][feature.category].total += feature.stableStats.ageInDays;
-      firstBrowser[year][first.browser][feature.category].featureCount++;
-      lastBrowser[year][last.browser][feature.category].total += feature.stableStats.ageInDays;
-      lastBrowser[year][last.browser][feature.category].featureCount++;
+      firstBrowser[year][feature.stableStats.first.browser][feature.category].total += feature.stableStats.ageInDays;
+      firstBrowser[year][feature.stableStats.first.browser][feature.category].featureCount++;
+      lastBrowser[year][feature.stableStats.last.browser][feature.category].total += feature.stableStats.ageInDays;
+      lastBrowser[year][feature.stableStats.last.browser][feature.category].featureCount++;
     }
   }
 
@@ -123,94 +120,8 @@ function renderResults({ helper, browserList, features, selectedBrowsers, select
   ${[...selectedFeatures].map(category => `<li>${featureConfig[category].name}: ${(averages.categories[category].total / averages.categories[category].featureCount).toFixed(2)} days</li>`)}
   </ul>
 
-  <h4>Average time to landing by year of first landing</h4>
-  <table>
-    <caption>If a feature landed in the earliest browser in 20XX it took Y days on average to become available in the last browser (when considering ${browserList}). TTA (time to available).</caption>
-    <thead>
-      <tr>  
-        <th></th>
-        ${[...selectedFeatures].map(category => `<th>${featureConfig[category].name} APIs</th><th>${featureConfig[category].name} TTA</th>`)}
-      </tr>
-      </thead>
-    <tbody>
-${template`${Object.entries(averages.firstLanding).map(([year, categories]) => {
-    return template`<tr>
-    <th>${year}</th>
-    ${[...selectedFeatures].map(category => `<td>${categories[category].featureCount}</td><td>${(categories[category].total / categories[category].featureCount).toFixed(2)}</td>`)}
-    </tr>`
-
-  })}`}
-    </tbody>
-  </table>
-
-  <h3>The Tortoise and the Hare</h3>
-
-  <p>There is a natural tension on the web with respect to browser engines. Every engine has their own set of priorities which define the level of investment that they choose to make and on which areas they choose to make it.</p>
-  
-  <p>A developer naturally wants their experiences to be available to the widest audience possible and these differing priorities create an unevenness on the platform (<a href="https://paul.kinlan.me/the-lumpy-web/">a lumpiness</a>) making it harder for developers to build experiences that work everywhere.
-  
-  <p>This section highlights where browsers are pushing and pulling on the platform.</p>
-
-  <h4>Sprinters</h4>
-  <p>This table is designed to show which browsers are pushing on the platform the most.</p>
-  <p>Adding features to quickly is not always desired because developers are unlikely to adopt those features in their sites or apps.</p>
-  <table>
-    <caption>For a given year, if a feature landed in Browser X first, how many days it take on average to be available in ${browserList}. TTA (time to available).</caption>
-    <thead>
-      <tr>  
-        <th>Year</th>
-        ${[...selectedFeatures].map(category => `<th>${featureConfig[category].name}</th><th>${featureConfig[category].name} TTA</th>`)}
-      </tr>
-      </thead>
-    <tbody>
-${template`${Object.entries(averages.firstBrowser).map(([year, browsers]) =>
-    template`
-    <tr>
-      <th colspan="${(selectedFeatures.size * 2) + 1}" scope="colgroup">${year}</th>
-    </tr>
-    ${template`${Object.entries(browsers).map(([browser, categories]) =>
-      `<tr>
-        <th>&nbsp;&nbsp;${helper.getBrowserName(browser)}</th>
-        ${[...selectedFeatures].map(category =>
-        `<td>${categories[category].featureCount}</td><td>${(categories[category].total / categories[category].featureCount).toFixed(2)}</td>`).join("")}
-      </tr>`
-    )}`}
-  `)// 
-      }`}
-    </tbody>
-  </table>
-
-  <h4>Plodders</h4>
-  ${((selectedBrowsers.size == 2) ? `<aside>When there are only 2 browsers this table is the inverse of the "Sprinters".</aside>` : ``)}
-  <p>This table is designed to show which browsers are pulling on the platform the most.</p>
-  <table>
-    <caption>For a feature that first landed in year X, how many days did it take on average for the last browser to catch up across ${browserList}. TTA (time to available).</caption>
-    <thead>
-      <tr>  
-        <th>Year</th>
-        ${[...selectedFeatures].map(category => `<th>${featureConfig[category].name} count</th><th>${featureConfig[category].name} TTA</th>`)}
-      </tr>
-      </thead>
-    <tbody>
-${template`${Object.entries(averages.lastBrowser).map(([year, browsers]) =>
-        template`
-    <tr>
-      <th colspan="${(selectedFeatures.size * 2) + 1}" scope="colgroup">${year}</th>
-    </tr>
-    ${template`${Object.entries(browsers).map(([browser, categories]) =>
-          `<tr>
-        <th>&nbsp;&nbsp;${helper.getBrowserName(browser)}</th>
-        ${[...selectedFeatures].map(category =>
-            `<td>${categories[category].featureCount}</td><td>${(categories[category].total / categories[category].featureCount).toFixed(2)}</td>`).join("")}
-      </tr>`
-        )}`}
-  `)// 
-      }`}
-    </tbody>
-  </table>
-
-  <h2>Stable APIs</h2>
-  <p>Below is a list of features that are in ${browserList}</p>
+  <h2>Deprecated APIs</h2>
+  <p>Below is a list of features that are deprecated in ${browserList}</p>
   <h3>Raw Data</h3>
   Quick Links: <ul>${[...selectedFeatures].map(selectedFeature => template`<li><a href="#${selectedFeature}-table">${featureConfig[selectedFeature].name}</a></li>`)}</ul>
   ${features.map(feature => {
@@ -256,7 +167,7 @@ export default function render({ bcd, features, submitted, browsers, browserList
   return template`<html>
 
   <head>
-	<title>Time to Stable ${(browserList != "") ? `across ${browserList}` : ""}</title>
+	<title>Deprecated ${(browserList != "") ? `across ${browserList}` : ""}</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
 	<meta name="author" content="Paul Kinlan">
   <meta charset="UTF-8">
@@ -279,11 +190,11 @@ export default function render({ bcd, features, submitted, browsers, browserList
   </head>
   <body>
     <header>
-      <h1>Time to Stable</h1>
+      <h1>Deprecated</h1>
     </header>
     ${renderNavigation()}
     <p>For a given set of browsers, what APIs are in all of them and how many days it take for the API to land in the first browser to the last.</p>
-    <form method=GET action="/" >
+    <form method=GET action="/deprecated" >
       ${renderWarnings(warnings)}
       ${renderBrowsers(browsers, selectedBrowsers)}
       ${renderFeatures(featureConfig, selectedFeatures)}

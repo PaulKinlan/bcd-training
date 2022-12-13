@@ -8,6 +8,7 @@ import htmlRender from './index/html.ts';
 import _404Render from './errors/404.ts';
 
 const controllers = {
+  'csv': _404Render,
   'html': htmlRender,
   'rss': _404Render
 }
@@ -41,11 +42,11 @@ export default function render(request: Request, bcd: CompatData): Response {
 
   const filteredData = Object.fromEntries(Object.entries(bcd).filter(([key]) => selectedFeatures.has(key)));
 
-  const stableFeatures = getStableFeatures(browsers, selectedBrowsers, filteredData);
+  const features = getStableFeatures(browsers, selectedBrowsers, filteredData);
 
   const data: WhenRender = {
     bcd,
-    stableFeatures,
+    features,
     browserList,
     browsers,
     helper,

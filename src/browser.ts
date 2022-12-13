@@ -8,6 +8,7 @@ export default class BrowsersHelper {
 
   getBrowserReleaseDate = (browser: BrowserName, version: string): string | undefined => {
     // need to do something with "mirror"
+    if (version in this.#browsers[browser].releases == false) return undefined;
     return this.#browsers[browser].releases[version].release_date;
   };
 

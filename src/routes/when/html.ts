@@ -20,7 +20,7 @@ function renderFeaturesQuery(features: FeatureConfig, selectedFeatures: Set<stri
     .join('&');
 }
 
-export default function render({ bcd, stableFeatures, browsers, browserList, selectedBrowsers, selectedFeatures, helper, featureConfig, warnings }: WhenRender): Response {
+export default function render({ bcd, features, browsers, browserList, selectedBrowsers, selectedFeatures, helper, featureConfig, warnings }: WhenRender): Response {
   let currentMonth = "";
 
   const { __meta } = bcd
@@ -69,11 +69,11 @@ export default function render({ bcd, stableFeatures, browsers, browserList, sel
     <p>Below is a list of features that are in ${browserList}, ordered reverse chronologically by when they became stable (i.e, available in the last browser).</p>
     
    ${(warnings.length == 0)
-      ? stableFeatures.map((feature) => {
+      ? features.map((feature) => {
         let response;
         let heading;
-        const date = feature.lastDate.getFullYear() + "/" +
-          (feature.lastDate.getUTCMonth() + 1);
+        const date = feature.stableStats.last.added.getFullYear() + "/" +
+          (feature.stableStats.last.added.getUTCMonth() + 1);
         if (currentMonth != date) {
           heading = template`
           ${(date == "") ? "" : "</tbody></table>"}
@@ -96,10 +96,10 @@ export default function render({ bcd, stableFeatures, browsers, browserList, sel
         <td>${("mdn_url" in feature && feature.mdn_url != undefined) ? `<a href="${feature.mdn_url}">${feature.api}</a>` : feature.api} ${("spec_url" in feature && feature.spec_url != undefined)
             ? template`<a href="${feature.spec_url}" title="${feature.api} specification">📋</a>`
             : template``
-          }</td><td>${helper.getBrowserName(feature.firstBrowser)
-          }</td><td>${feature.firstDate.toLocaleDateString()}</td>
-        <td>${helper.getBrowserName(feature.lastBrowser)
-          }</td><td>${feature.lastDate.toLocaleDateString()}</td><td>${feature.ageInDays}</td></tr>`;
+          }</td><td>${helper.getBrowserName(feature.stableStats.first.browser)
+          }</td><td>${feature.stableStats.first.added.toLocaleDateString()}</td>
+        <td>${helper.getBrowserName(feature.stableStats.last.browser)
+          }</td><td>${feature.stableStats.last.added.toLocaleDateString()}</td><td>${feature.stableStats.ageInDays}</td></tr>`;
 
         currentMonth = date;
 

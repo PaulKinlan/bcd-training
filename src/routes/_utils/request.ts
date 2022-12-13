@@ -15,6 +15,12 @@ export function parseSelectedBrowsers(request: Request): Set<BrowserName> {
 
 export function parseResponse(request: Request): ResponseType {
   const url = new URL(request.url);
-  const responseType: ResponseType = (url.searchParams.get("type") == "rss") ? "rss" : "html";
-  return responseType;
+  const ValidResponses = ['csv', 'html', 'rss'];
+
+  const response = url.searchParams.get("type") || "html";
+
+  if(ValidResponses.indexOf(response) >= 0) {
+    return <ResponseType>response;
+  }
+  return "html"; // Default to HTML
 }

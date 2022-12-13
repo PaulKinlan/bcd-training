@@ -1,7 +1,7 @@
 import { WhenRender } from "../types.d.ts";
 import { Feed } from 'https://jspm.dev/feed';
 
-export default function render({ bcd, stableFeatures, browsers, browserList, selectedBrowsers, selectedFeatures, helper, featureConfig, warnings }: WhenRender): Response {
+export default function render({ bcd, features, browsers, browserList, selectedBrowsers, selectedFeatures, helper, featureConfig, warnings }: WhenRender): Response {
   const { __meta } = bcd
 
   const feed = new Feed({
@@ -13,20 +13,20 @@ export default function render({ bcd, stableFeatures, browsers, browserList, sel
   });
 
 
-  const features: { [x: string]: any[]; } = {};
+  const featureOutput: { [x: string]: any[]; } = {};
 
-  for (const feature of stableFeatures) {
-    const { lastDate } = feature;
+  for (const feature of features) {
+    const lastDate = feature.stableStats.last.added;
     const date = `${lastDate.getFullYear()}/${lastDate.getUTCMonth() + 1}`;
 
-    if (date in features == false) features[date] = [];
+    if (date in featureOutput == false) featureOutput[date] = [];
 
-    features[date].push(feature);
+    featureOutput[date].push(feature);
   }
 
-  for (const dateGrouping in features) {
+  for (const dateGrouping in featureOutput) {
 
-    const groupedFeatures = features[dateGrouping];
+    const groupedFeatures = featureOutput[dateGrouping];
 
     let table = `<table>
     <thead>
@@ -45,10 +45,10 @@ export default function render({ bcd, stableFeatures, browsers, browserList, sel
         ${("spec_url" in feature)
         ? `<a href="${feature.spec_url}" title="${feature.api} specification">📋</a>`
         : ``
-      }</td><td>${helper.getBrowserName(feature.firstBrowser)
-      }</td><td>${feature.firstDate.toLocaleDateString()}</td>
-    <td>${helper.getBrowserName(feature.lastBrowser)
-      }</td><td>${feature.lastDate.toLocaleDateString()}</td><td>${feature.ageInDays}</td></tr>`, "")}
+      }</td><td>${helper.getBrowserName(feature.stableStats.first.browser)
+      }</td><td>${feature.stableStats.first.added.toLocaleDateString()}</td>
+    <td>${helper.getBrowserName(feature.stableStats.last.browser)
+      }</td><td>${feature.stableStats.last.added.toLocaleDateString()}</td><td>${feature.stableStats.ageInDays}</td></tr>`, "")}
     </tbody></table>`;
 
     // Format the features

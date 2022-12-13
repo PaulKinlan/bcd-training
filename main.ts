@@ -8,6 +8,10 @@ import bcd from "https://esm.sh/@mdn/browser-compat-data@latest";
 import index from "./src/routes/index.ts";
 import notStable from "./src/routes/not-stable.ts";
 import when from "./src/routes/when.ts";
+import deprecated from "./src/routes/deprecated.ts";
+import experimental from "./src/routes/experimental.ts";
+import all from "./src/routes/all.ts";
+import removed from "./src/routes/removed.ts";
 import { Route } from "./types/types.d.ts";
 // Init
 
@@ -15,7 +19,6 @@ delete bcd.webextensions;
 delete bcd.webdriver;
 delete bcd.svg;
 delete bcd.mathml;
-
 
 class StaticFileHandler {
   #basePath = "";
@@ -67,9 +70,33 @@ serve((req: Request) => {
       },
     ],
     [
+      new URLPattern({ pathname: "/deprecated" }),
+      (request) => {
+        return deprecated(request, bcd);
+      },
+    ],
+    [
+      new URLPattern({ pathname: "/experimental" }),
+      (request) => {
+        return experimental(request, bcd);
+      },
+    ],
+    [
       new URLPattern({ pathname: "/when-stable" }),
       (request) => {
         return when(request, bcd);
+      },
+    ],
+    [
+      new URLPattern({ pathname: "/removed" }),
+      (request) => {
+        return removed(request, bcd);
+      },
+    ],
+    [
+      new URLPattern({ pathname: "/all" }),
+      (request) => {
+        return all(request, bcd);
       },
     ],
     // Fall through.

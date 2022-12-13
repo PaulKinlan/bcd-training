@@ -1,32 +1,30 @@
-
-import { getStableFeatures } from "../bcd.ts";
-import { default as Browsers, default as BrowsersHelper } from "../browser.ts";
 import { CompatData } from "../types.d.ts";
+import { getFeatures } from "../bcd.ts";
+import BrowsersHelper from "../browser.ts";
 import { parseResponse, parseSelectedBrowsers, parseSelectedFeatures } from "./_utils/request.ts";
 import { FeatureConfig, WhenRender } from "./types.d.ts";
 
-import htmlRender from './when/html.ts';
-import rssRender from './when/rss.ts';
-import csvRender from './when/csv.ts';
+import htmlRender from './all/html.ts';
+import csvRender from './all/csv.ts';
+import _404Render from './errors/404.ts';
 
 const controllers = {
   'csv': csvRender,
   'html': htmlRender,
-  'rss': rssRender
-};
-
-const featureConfig: FeatureConfig = { 'api': { name: "DOM API" }, 'css': { name: "CSS" }, 'html': { name: "HTML" }, 'javascript': { name: "JS" } };
+  'rss': _404Render
+}
 
 export default function render(request: Request, bcd: CompatData): Response {
+
   const url = new URL(request.url);
-  const { __meta, browsers } = bcd;
+  const { browsers } = bcd;
+  const featureConfig: FeatureConfig = { 'api': { name: "DOM API" }, 'css': { name: "CSS" }, 'html': { name: "HTML" }, 'javascript': { name: "JS" } };
 
   const warnings = new Array<string>();
-  const helper = new Browsers(browsers);
+  const helper = new BrowsersHelper(browsers);
 
   const selectedBrowsers = parseSelectedBrowsers(request);
   const selectedFeatures = parseSelectedFeatures(request);
-
   const responseType = parseResponse(request);
 
   const submitted = url.href.indexOf("?") > -1; // Likely submitted from form with nothing selected.
@@ -39,27 +37,13 @@ export default function render(request: Request, bcd: CompatData): Response {
     warnings.push("Choose at least one feature to show");
   }
 
-  // only show the features selected.
-  const filteredData = Object.fromEntries(
-    Object.entries(bcd).filter(([key]) => selectedFeatures.has(key)),
-  );
-
-  const features = getStableFeatures(
-    browsers,
-    selectedBrowsers,
-    filteredData,
-  );
-
-  features.sort((a, b) => {
-    return b.stableStats.last.added - a.stableStats.last.added;
-  });
-
   // Formatter that we will use a couple of times.
-  const formatter = new Intl.ListFormat("en", {
-    style: "long",
-    type: "conjunction",
-  });
+  const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
   const browserList = formatter.format(helper.getBrowserNames(selectedBrowsers));
+
+  const filteredData = Object.fromEntries(Object.entries(bcd).filter(([key]) => selectedFeatures.has(key)));
+
+  const features = getFeatures(browsers, selectedBrowsers, filteredData);
 
   const data: WhenRender = {
     bcd,

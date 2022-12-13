@@ -17,7 +17,7 @@ function generateCrossTab(features: CompatResult[], mustBeIn: BrowserName[]) {
     const featureNotIn: BrowserName[] = [];
 
     for (const browser of mustBeIn) {
-      if (feature.browserSupport.includes(browser)) {
+      if (feature.stableStats.browsers.includes(browser)) {
         featureIn.push(browser);
       }
       else {
@@ -50,40 +50,13 @@ function initApiCounts() {
   }
 }
 
-function generateAverage(stableFeatures: CompatResult[]) {
-  let total = 0;
-  const featureCount = stableFeatures.length;
-  const categories: { [Z in ValidFeatures]: { total: number, featureCount: number } } = initApiCounts();
-  const firstLanding: { [K: number]: typeof categories } = {  // << Fffark the typeof worked as I guessed. Very cool Typescript. Very cool.
-  };
-
-  for (const feature of stableFeatures) {
-    total += feature.ageInDays;
-    const year = feature.firstDate.getFullYear();
-    if (feature.category !== undefined) {
-      categories[feature.category].total += feature.ageInDays;
-      categories[feature.category].featureCount++;
-
-      if (year in firstLanding == false) {
-        firstLanding[year] = initApiCounts();
-      }
-
-      firstLanding[year][feature.category].total += feature.ageInDays;
-      firstLanding[year][feature.category].featureCount++;
-    }
-  }
-
-  return { total, featureCount, categories, firstLanding };
-}
-
-function renderResults({ helper, browserList, stableFeatures, selectedBrowsers, selectedFeatures, featureConfig }: { bcd: CompatData; browsers: Browsers; helper: BrowsersHelper; browserList; stableFeatures: CompatResult[]; selectedBrowsers: Set<BrowserName>; selectedFeatures: Set<ValidFeatures>; featureConfig: FeatureConfig; }): ReadableStream<any> {
+function renderResults({ helper, browserList, features, selectedBrowsers, selectedFeatures, featureConfig }: { bcd: CompatData; browsers: Browsers; helper: BrowsersHelper; browserList; features: CompatResult[]; selectedBrowsers: Set<BrowserName>; selectedFeatures: Set<ValidFeatures>; featureConfig: FeatureConfig; }): ReadableStream<any> {
 
   let currentCategory = "";
 
   // only show the features selected.
 
-  const tablulateSummary = generateCrossTab(stableFeatures, selectedBrowsers);
-  const averages = generateAverage(stableFeatures);
+  const tablulateSummary = generateCrossTab(features, selectedBrowsers);
 
   const output = template`
   <h2>Summary</h2>
@@ -104,31 +77,11 @@ function renderResults({ helper, browserList, stableFeatures, selectedBrowsers, 
     </tbody>
   </table>
 
-  <h4>Number of APIs that are <strong>not in</strong> all of ${browserList}</h4>
-  <table>
-    <caption>If a feature landed in the earliest browser in 20XX</caption>
-    <thead>
-      <tr>  
-        <th></th>
-        ${[...selectedFeatures].map(category => `<th>${featureConfig[category].name} APIs</th>`)}
-      </tr>
-      </thead>
-    <tbody>
-${template`${Object.entries(averages.firstLanding).map(([year, categories]) => {
-    return template`<tr>
-    <th>${year}</th>
-    ${[...selectedFeatures].map(category => `<td>${categories[category].featureCount}</td>`)}
-    </tr>`
-
-  })}`}
-    </tbody>
-  </table>
-
   <h2>Unstable APIs</h2>
   <p>Below is a list of features that are <strong>not in</strong> all of ${browserList}</p>
   <h3>Raw Data</h3>
   Quick Links: <ul>${[...selectedFeatures].map(selectedFeature => template`<li><a href="#${selectedFeature}-table">${featureConfig[selectedFeature].name}</a></li>`)}</ul>
-  ${stableFeatures.map(feature => {
+  ${features.map(feature => {
     let response;
     let heading;
     if (currentCategory != feature.category) {
@@ -148,7 +101,7 @@ ${template`${Object.entries(averages.firstLanding).map(([year, categories]) => {
     }
     
     response = template`${(heading != undefined) ? heading : ""}<tr>
-    <td>${("mdn_url" in feature && feature.mdn_url != undefined) ? `<a href="${feature.mdn_url}">${feature.api}</a>` : feature.api} ${("spec_url" in feature && feature.spec_url != undefined) ? template`<a href="${feature.spec_url}" title="${feature.api} specification">📋</a>` : template``}</td><td>${helper.getBrowserName(feature.firstBrowser)}</td><td>${feature.firstDate.toLocaleDateString()}</td><td>${((Date.now() - feature.firstDate.getTime()) / (1000 * 24 * 60 * 60)).toFixed(0)}</td></tr>`;
+    <td>${("mdn_url" in feature && feature.mdn_url != undefined) ? `<a href="${feature.mdn_url}">${feature.api}</a>` : feature.api} ${("spec_url" in feature && feature.spec_url != undefined) ? template`<a href="${feature.spec_url}" title="${feature.api} specification">📋</a>` : template``}</td><td>${helper.getBrowserName(feature.stableStats.first.browser)}</td><td>${feature.stableStats.first.added.toLocaleDateString()}</td><td>${((Date.now() - feature.stableStats.first.added.getTime()) / (1000 * 24 * 60 * 60)).toFixed(0)}</td></tr>`;
 
     currentCategory = feature.category;
 
@@ -161,7 +114,7 @@ ${template`${Object.entries(averages.firstLanding).map(([year, categories]) => {
   return output;
 }
 
-export default function render({ bcd, stableFeatures, submitted, browsers, browserList, selectedBrowsers, selectedFeatures, helper, featureConfig, warnings }: WhenRender): Response {
+export default function render({ bcd, features, submitted, browsers, browserList, selectedBrowsers, selectedFeatures, helper, featureConfig, warnings }: WhenRender): Response {
 
   const { __meta } = bcd
 
@@ -203,7 +156,7 @@ export default function render({ bcd, stableFeatures, submitted, browsers, brows
       <input type=submit>
     </form>
     
-    ${(submitted && warnings.length == 0) ? renderResults({ bcd, browsers, helper, browserList, stableFeatures, selectedBrowsers, selectedFeatures, featureConfig }) : ``}
+    ${(submitted && warnings.length == 0) ? renderResults({ bcd, browsers, helper, browserList, features, selectedBrowsers, selectedFeatures, featureConfig }) : ``}
      
     <footer><p>Created by <a href="https://paul.kinlan.me">Paul Kinlan</a>. Using <a href="https://github.com/mdn/browser-compat-data">BCD</a> version: ${__meta.version}, updated on ${__meta.timestamp}</p></footer>
     </body>
