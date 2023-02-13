@@ -110,7 +110,7 @@ export default function render({ bcd, features, browsers, browserList, selectedB
     } 
    </tbody>
   </table>
-  ${renderFooter()}
+  ${renderFooter(__meta)}
   </body>
   </html>`.then((data) => new Response(data, {
       status: 200,

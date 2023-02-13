@@ -104,7 +104,7 @@ export default function render({ bcd, features, submitted, browsers, browserList
     
     ${(submitted && warnings.length == 0) ? renderResults({ bcd, browsers, helper, browserList, features, selectedBrowsers, selectedFeatures, featureConfig }) : ``}
      
-    ${renderFooter()}
+    ${renderFooter(__meta)}
     </body>
   </html>`
     .then(data => new Response(data, { status: 200, headers: { 'content-type': 'text/html' } }));
