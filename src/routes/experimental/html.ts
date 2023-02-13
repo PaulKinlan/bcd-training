@@ -17,7 +17,7 @@ function renderResults({ helper, browserList, features, selectedBrowsers, select
   <h2>Summary</h2>
 
   <h2>Experimental APIs</h2>
-  <p>Below is a list of features that are "Experimental" in ${browserList}</p>
+  <p>Below is a list of features that are marked as "Experimental" in ${browserList}</p>
   <h3>Raw Data</h3>
   Quick Links: <ul>${[...selectedFeatures].map(selectedFeature => template`<li><a href="#${selectedFeature}-table">${featureConfig[selectedFeature].name}</a></li>`)}</ul>
   ${features.map(feature => {
@@ -93,7 +93,7 @@ export default function render({ bcd, features, submitted, browsers, browserList
       <h1>Experimental</h1>
     </header>
     ${renderNavigation()}
-    <p>For a given set of browsers what APIs are not in all of them?</p>
+    <p>For a given set of browsers what APIs are still considred experimental, and how long have they been experimental?</p>
     <form method=GET action="/experimental">
       ${renderWarnings(warnings)}
       ${renderBrowsers(browsers, selectedBrowsers)}

@@ -45,8 +45,6 @@ export default function render(request: Request, bcd: CompatData): Response {
   const features = getFeatures(browsers, selectedBrowsers, filteredData)
     .filter(feature => feature.status.experimental == true && feature.stableStats?.first != null);
 
-    console.log(features)
-
   const data: WhenRender = {
     bcd,
     features,
