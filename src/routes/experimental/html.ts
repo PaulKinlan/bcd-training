@@ -6,6 +6,7 @@ import renderBrowsers from "../ui-components/browsers.ts";
 import renderFeatures from "../ui-components/features.ts";
 import renderWarnings from "../ui-components/warnings.ts";
 import renderNavigation from "../ui-components/nav.ts";
+import renderFooter from "../ui-components/footer.ts";
 
 function renderResults({ helper, browserList, features, selectedBrowsers, selectedFeatures, featureConfig }: WhenRender): ReadableStream<any> {
 
@@ -70,7 +71,7 @@ export default function render({ bcd, features, submitted, browsers, browserList
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
 	<meta name="author" content="Paul Kinlan">
   <meta charset="UTF-8">
-  <meta name="description" content="A list of features that are considered "Experimental" for ${browserList} and when the landed in the first browser and the last">
+  <meta name="description" content="A list of features that are considered "Experimental" for ${browserList} and when the landed in the first browser">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <link rel="shortcut icon" href="/images/favicon.png">
 	<link rel="author" href="https://paul.kinlan.me/">
@@ -92,8 +93,8 @@ export default function render({ bcd, features, submitted, browsers, browserList
       <h1>Experimental</h1>
     </header>
     ${renderNavigation()}
-    <p>For a given set of browsers, what APIs are in all of them and how many days it take for the API to land in the first browser to the last.</p>
-    <form method=GET action="/experimental" >
+    <p>For a given set of browsers what APIs are not in all of them?</p>
+    <form method=GET action="/experimental">
       ${renderWarnings(warnings)}
       ${renderBrowsers(browsers, selectedBrowsers)}
       ${renderFeatures(featureConfig, selectedFeatures)}
@@ -103,7 +104,7 @@ export default function render({ bcd, features, submitted, browsers, browserList
     
     ${(submitted && warnings.length == 0) ? renderResults({ bcd, browsers, helper, browserList, features, selectedBrowsers, selectedFeatures, featureConfig }) : ``}
      
-    <footer><p>Created by <a href="https://paul.kinlan.me">Paul Kinlan</a>. Using <a href="https://github.com/mdn/browser-compat-data">BCD</a> version: ${__meta.version}, updated on ${__meta.timestamp}</p></footer>
+    ${renderFooter()}
     </body>
   </html>`
     .then(data => new Response(data, { status: 200, headers: { 'content-type': 'text/html' } }));

@@ -6,6 +6,7 @@ import renderBrowsers from "../ui-components/browsers.ts";
 import renderFeatures from "../ui-components/features.ts";
 import renderWarnings from "../ui-components/warnings.ts";
 import renderNavigation from "../ui-components/nav.ts";
+import renderFooter from "../ui-components/footer.ts";
 
 type BrowserCrossTabResult = { [K in BrowserName]?: { [K in BrowserName]?: number } }
 
@@ -293,7 +294,7 @@ export default function render({ bcd, features, submitted, browsers, browserList
     
     ${(submitted && warnings.length == 0) ? renderResults({ bcd, browsers, helper, browserList, features, selectedBrowsers, selectedFeatures, featureConfig }) : ``}
      
-    <footer><p>Created by <a href="https://paul.kinlan.me">Paul Kinlan</a>. Using <a href="https://github.com/mdn/browser-compat-data">BCD</a> version: ${__meta.version}, updated on ${__meta.timestamp}</p></footer>
+    ${renderFooter()}
     </body>
   </html>`
     .then(data => new Response(data, { status: 200, headers: { 'content-type': 'text/html' } }));
