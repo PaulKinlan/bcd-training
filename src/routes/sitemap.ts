@@ -4,7 +4,7 @@ import BrowsersHelper from "../browser.ts";
 import { parseResponse, parseSelectedBrowsers, parseSelectedFeatures } from "./_utils/request.ts";
 import { FeatureConfig, WhenRender } from "./types.d.ts";
 
-import xmlRender from './all/xml.ts';
+import xmlRender from './sitemap/xml.ts';
 
 const controllers = {
   'xml': xmlRender
@@ -19,13 +19,14 @@ export default function render(request: Request, bcd: CompatData): Response {
   const helper = new BrowsersHelper(browsers);
 
   const selectedBrowsers = helper.getBrowserIds();
-  const responseType = parseResponse(request);
+  const responseType = 'xml';
 
   // Formatter that we will use a couple of times.
   const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
   const browserList = formatter.format(helper.getAllBrowserNames());
 
-  const filteredData = Object.fromEntries(Object.entries(bcd));
+  const selectedFeatures = new Set(['api', 'css', 'javascript', 'html']);
+  const filteredData = Object.fromEntries(Object.entries(bcd).filter(([key]) => selectedFeatures.has(key)));
   const features = getFeatures(browsers, selectedBrowsers, filteredData);
 
   const data: WhenRender = {
@@ -41,5 +42,6 @@ export default function render(request: Request, bcd: CompatData): Response {
     warnings
   };
 
+  console.log('responseType', responseType)
   return controllers[responseType](data);
 }

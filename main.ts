@@ -6,7 +6,7 @@ import { contentType } from "https://deno.land/std@0.152.0/media_types/mod.ts";
 import bcd from "https://esm.sh/@mdn/browser-compat-data@latest";
 
 import index from "./src/routes/index.ts";
-import all from "./src/routes/all.ts";
+import feature from "./src/routes/feature.ts";
 import sitemap from "./src/routes/sitemap.ts";
 
 import { Route } from "./types/types.d.ts";
@@ -64,13 +64,13 @@ serve((req: Request) => {
       new URLPattern({ pathname: "/sitemap.xml" }),
       (request) => {
         return sitemap(request, bcd);
-      },
+      }
     ],
     [
-      new URLPattern({ pathname: "/all" }),
+      new URLPattern({ pathname: "/feature" }),
       (request) => {
-        return all(request, bcd);
-      },
+        return feature(request, bcd);
+      }
     ],
     // Fall through.
     [

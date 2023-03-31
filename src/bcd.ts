@@ -277,7 +277,7 @@ const getFeatureSupport = (featureSupport: CompatStatement["support"], browsers:
 export const getFeatures = (browsers: Browsers, mustBeIn: Set<BrowserName>, data: Identifier | CompatStatement): CompatResult[] => {
   const output = [];
   for (const [api, compat, root] of itterateFeatures(data)) {
-    if ("__compat" in compat) {
+    if (typeof(compat) == "object" && "__compat" in compat) {
       const status = compat.__compat?.status;
       const mdn_url = compat.__compat?.mdn_url;
       const spec_url = compat.__compat?.spec_url;

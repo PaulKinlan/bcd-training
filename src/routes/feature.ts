@@ -1,31 +1,21 @@
-import { CompatData } from "../types.d.ts";
 import { getFeatures } from "../bcd.ts";
 import BrowsersHelper from "../browser.ts";
-import { parseResponse } from "./_utils/request.ts";
-import { FeatureConfig, WhenRender } from "./types.d.ts";
+import { CompatData, FeatureConfig } from "./types.d.ts";
 
-import htmlRender from './index/html.ts';
-import _404Render from './errors/404.ts';
-
-const controllers = {
-  'csv': _404Render,
-  'html': htmlRender,
-  'rss': _404Render
-}
+import htmlRender from './feature/html.ts';
 
 export default function render(request: Request, bcd: CompatData): Response {
 
   const url = new URL(request.url);
-  const { __meta, browsers } = bcd;
+  const { browsers } = bcd;
   const featureConfig: FeatureConfig = { 'api': { name: "DOM API" }, 'css': { name: "CSS" }, 'html': { name: "HTML" }, 'javascript': { name: "JS" } };
 
-  const warnings = new Array<string>();
+  const featureName = url.searchParams.get('id');
+
   const helper = new BrowsersHelper(browsers);
 
   const selectedBrowsers = helper.getBrowserIds();
   const selectedFeatures = new Set(['api', 'css', 'javascript', 'html']);
-  const responseType = parseResponse(request);
-
 
   // Formatter that we will use a couple of times.
   const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
@@ -35,18 +25,13 @@ export default function render(request: Request, bcd: CompatData): Response {
 
   const features = getFeatures(browsers, selectedBrowsers, filteredData);
 
-  const data: WhenRender = {
+  const data  = {
     bcd,
     features,
     browserList,
-    browsers,
     helper,
-    featureConfig,
-    selectedFeatures,
-    selectedBrowsers,
-    submitted: true,
-    warnings
+    featureName
   };
 
-  return controllers[responseType](data);
+  return htmlRender(data);
 }

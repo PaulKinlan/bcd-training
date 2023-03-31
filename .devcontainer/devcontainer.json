@@ -9,8 +9,10 @@
 	
     // Add the IDs of extensions you want installed when the container is created.
     "extensions": [
-        "denoland.vscode-deno"
-    ],
+		"denoland.vscode-deno",
+		"GitHub.copilot",
+		"GitHub.copilot-labs"
+	],
 
     // Use 'forwardPorts' to make a list of ports inside the container available locally.
     // "forwardPorts": [],
