@@ -1,4 +1,5 @@
 FROM mcr.microsoft.com/vscode/devcontainers/base:0-buster
+FROM mcr.microsoft.com/vscode/devcontainers/base:0-buster
 
 ENV DENO_INSTALL=/deno
 RUN mkdir -p /deno \
