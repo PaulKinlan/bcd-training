@@ -16,8 +16,18 @@ export default class BrowsersHelper {
     return this.#browsers[browser].name;
   };
 
+  getBrowserIds = (): string[] => {
+    return Object.keys(this.#browsers);
+  };
+
   getBrowserNames = (selectedBrowsers: Set<BrowserName>) => {
     return [...selectedBrowsers.keys()].map((browser) =>
+      this.#browsers[browser].name
+    );
+  };
+
+  getAllBrowserNames = () => {
+    return Object.keys(this.#browsers).map((browser) =>
       this.#browsers[browser].name
     );
   };
