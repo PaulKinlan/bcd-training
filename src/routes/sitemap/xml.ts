@@ -8,7 +8,7 @@ export default function render({ bcd, features }: WhenRender): Response {
   return template`
   <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
     <url>
-      <loc>https://paul.kinlan.me/</loc>
+      <loc>https://bcd-training.deno.dev/</loc>
       <lastmod>${__meta.timestamp}</lastmod>
     </url>
   ${features.map(feature => template`
