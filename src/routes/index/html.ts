@@ -6,7 +6,6 @@ import renderFooter from "../ui-components/footer.ts";
 
 export default function render({ bcd, features, browsers, browserList, selectedBrowsers, selectedFeatures, helper, featureConfig }: WhenRender): Response {
 
-  console.log(selectedFeatures)
 
   const { __meta } = bcd
 

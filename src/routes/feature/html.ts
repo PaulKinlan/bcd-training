@@ -13,11 +13,7 @@ export default function render({ bcd, featureName, features, browserList, helper
     return acc[key]
   }, bcd);
 
-  console.log(feature)
-
   const { mdn_url, spec_url, support, status } = feature.__compat;
-
-  Object.entries(support).map((browser, data) => console.log(browser, data))
 
   return template`<html>
 

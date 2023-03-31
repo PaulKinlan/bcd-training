@@ -42,6 +42,5 @@ export default function render(request: Request, bcd: CompatData): Response {
     warnings
   };
 
-  console.log('responseType', responseType)
   return controllers[responseType](data);
 }
