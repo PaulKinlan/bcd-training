@@ -20,12 +20,13 @@ export default function render({ bcd, featureName, features, browserList, helper
   return template`<html>
 
   <head>
-	<title>All features</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+	<title>Feature: ${featureName}</title>
+	<meta name="description" content="A summary of Browser Compat Data for ${featureName}">
+  	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
 	<meta name="author" content="Paul Kinlan">
-  <meta charset="UTF-8">
+  	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <link rel="shortcut icon" href="/images/favicon.png">
+  	<link rel="shortcut icon" href="/images/favicon.png">
 	<link rel="author" href="https://paul.kinlan.me/">
   <style>
   </style>
