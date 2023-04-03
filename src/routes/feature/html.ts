@@ -19,6 +19,7 @@ export default function render({ bcd, featureName, features, browserList, helper
 
   <head>
 	<title>Feature: ${featureName}</title>
+	<meta name="description" content="A summary of Browser Compat Data for ${featureName}">
   	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
 	<meta name="author" content="Paul Kinlan">
   	<meta charset="UTF-8">
