@@ -1,6 +1,8 @@
 import BrowsersHelper from "../../browser.ts";
 import template from "../../flora.ts";
-import { Browsers, BrowserName, CompatData, CompatResult, ValidFeatures } from "../../types.d.ts";
+import { CompatData, CompatResult } from "../../types.d.ts";
+
+import renderNav from "../ui-components/nav.ts";
 import renderFooter from "../ui-components/footer.ts";
 
 type FeatureData = { features: CompatResult[]; bcd: CompatData; browserList: any; helper: BrowsersHelper, featureName: string }
@@ -26,22 +28,14 @@ export default function render({ bcd, featureName, features, browserList, helper
   <link rel="shortcut icon" href="/images/favicon.png">
 	<link rel="author" href="https://paul.kinlan.me/">
   <style>
-
-  table {
-    table-layout:fixed;
-    width: 100%;
-  }
-
-  form span.warning {
-    color: red;
-  }
-
   </style>
   </head>
   <body>
     <header>
+      ${renderNav()}
       <h1>${featureName}</h1>
     </header>
+
     
     <p><a href="${spec_url}">Spec</a></p>
     <p><a href="${mdn_url}">MDN URL</a></p>

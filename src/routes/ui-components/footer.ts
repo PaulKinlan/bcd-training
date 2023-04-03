@@ -1,4 +1,3 @@
-import { BrowserName, Browsers } from "../../types.d.ts";
 import template from "../../flora.ts";
 
 export default function renderFooter(__meta): ReadableStream<any> {
