@@ -29,6 +29,12 @@ export default function render({ bcd, features, browserList }: WhenRender): Resp
     <header>
       <h1>All APIs</h1>
     </header>
+    <p>A list of all browser features and a link to their compat data in English (vs JSON) so that it can be consumed by LLMs like OpenAI.</p>
+
+    <p>To see it in action visit: <a href="
+    https://paul.kinlan.me/ask-paul?query=When+did+CSS+acos+arrive+in+Chrome%3F">
+    https://paul.kinlan.me/ask-paul?query=When+did+CSS+acos+arrive+in+Chrome%3F</a></p>
+    <p>There are ${features.length} features in the list.</p>
 
     <ul>
     ${features.map(feature => template`<li><a href="/feature?id=${feature.api}">${feature.api}</a></li>`
