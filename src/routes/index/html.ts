@@ -19,12 +19,6 @@ export default function render({ bcd, features, browserList }: WhenRender): Resp
   <link rel="shortcut icon" href="/images/favicon.png">
 	<link rel="author" href="https://paul.kinlan.me/">
   <style>
-
-  table {
-    table-layout:fixed;
-    width: 100%;
-  }
-
   form span.warning {
     color: red;
   }
@@ -36,21 +30,10 @@ export default function render({ bcd, features, browserList }: WhenRender): Resp
       <h1>All APIs</h1>
     </header>
 
-    <table>
-  <thead>
-    <tr>
-      <th>API</th>
-      <th>Category</th>
-    </tr>
-  </thead>
-  <tbody>
-    ${features.map(feature => template`
-    <tr>
-      <td><a href="/feature?id=${feature.api}">${feature.api}</a></td>
-    </tr>`
+    <ul>
+    ${features.map(feature => template`<li><a href="/feature?id=${feature.api}">${feature.api}</a></li>`
   )}
-  </tbody>
-  </table>
+    </ul>
 
     ${renderFooter(__meta)}
     </body>
