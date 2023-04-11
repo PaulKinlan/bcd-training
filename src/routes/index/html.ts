@@ -1,10 +1,8 @@
-import BrowsersHelper from "../../browser.ts";
 import template from "../../flora.ts";
-import { Browsers, BrowserName, CompatResult, ValidFeatures } from "../../types.d.ts";
-import { FeatureConfig, WhenRender } from "../types.d.ts";
+import { WhenRender } from "../types.d.ts";
 import renderFooter from "../ui-components/footer.ts";
 
-export default function render({ bcd, features, browsers, browserList, selectedBrowsers, selectedFeatures, helper, featureConfig }: WhenRender): Response {
+export default function render({ bcd, features, browserList }: WhenRender): Response {
 
 
   const { __meta } = bcd
@@ -12,8 +10,8 @@ export default function render({ bcd, features, browsers, browserList, selectedB
   return template`<html>
 
   <head>
-	<title>All features</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+	<title>A list of all browser features and a link to their compat data</title>
+  <link rel="stylesheet" href="/styles/water.css">
 	<meta name="author" content="Paul Kinlan">
   <meta charset="UTF-8">
   <meta name="description" content="A list of features that are considered "Experimental" for ${browserList} and when the landed in the first browser and the last">

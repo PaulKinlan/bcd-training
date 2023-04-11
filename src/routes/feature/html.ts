@@ -7,7 +7,7 @@ import renderFooter from "../ui-components/footer.ts";
 
 type FeatureData = { features: CompatResult[]; bcd: CompatData; browserList: any; helper: BrowsersHelper, featureName: string }
 
-export default function render({ bcd, featureName, features, browserList, helper }: FeatureData): Response {
+export default function render({ bcd, featureName, helper }: FeatureData): Response {
 
   const { __meta } = bcd;
 
@@ -22,7 +22,7 @@ export default function render({ bcd, featureName, features, browserList, helper
   <head>
 	<title>Feature: ${featureName}</title>
 	<meta name="description" content="A summary of Browser Compat Data for ${featureName}">
-  	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+  <link rel="stylesheet" href="/styles/water.css">
 	<meta name="author" content="Paul Kinlan">
   	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -37,7 +37,6 @@ export default function render({ bcd, featureName, features, browserList, helper
       <h1>${featureName}</h1>
     </header>
 
-    
     <p><a href="${spec_url}">Spec</a></p>
     <p><a href="${mdn_url}">MDN URL</a></p>
 
