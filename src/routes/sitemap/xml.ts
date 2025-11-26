@@ -14,7 +14,7 @@ export default function render({ bcd, features }: WhenRender): Response {
   ${features.map(feature => template`
     <url>
       <loc>https://bcd-training.deno.dev/feature?id=${feature.api}</loc>
-      <lastmod>>${__meta.timestamp}</lastmod>
+      <lastmod>${__meta.timestamp}</lastmod>
     </url>`
   )}
   </urlset>`
