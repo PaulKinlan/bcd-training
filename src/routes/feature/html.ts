@@ -58,27 +58,60 @@ export default function render({ bcd, featureName, helper }: FeatureData): Respo
     .then(data => new Response(data, { status: 200, headers: { 'content-type': 'text/html' } }));
 }
 
+function getSupportStatement(support: any, browser: string): any {
+  const browserSupport = support[browser];
+  // If support data is an array, use the first entry (most recent/current support)
+  return Array.isArray(browserSupport) ? browserSupport[0] : browserSupport;
+}
+
+function renderNotes(support: any, browser: string): string {
+  const browserSupport = support[browser];
+  const entries = Array.isArray(browserSupport) ? browserSupport : [browserSupport];
+  
+  const notes: string[] = [];
+  for (const entry of entries) {
+    if (entry && entry.notes) {
+      if (Array.isArray(entry.notes)) {
+        notes.push(...entry.notes.filter((n: unknown) => typeof n === 'string'));
+      } else if (typeof entry.notes === 'string') {
+        notes.push(entry.notes);
+      }
+    }
+  }
+  
+  if (notes.length === 0) {
+    return "";
+  }
+  
+  return ` <em>Note: ${notes.join(' ')}</em>`;
+}
+
 function renderVersionRemoved(support: any, browser: string, helper: BrowsersHelper): any {
-  return ("version_removed" in support[browser]) ? `Removed from ${helper.getBrowserName(browser)} version ${support[browser].version_removed} on ${helper.getBrowserReleaseDate(browser, support[browser].version_removed)}` : "";
+  const supportStatement = getSupportStatement(support, browser);
+  if (!supportStatement || !("version_removed" in supportStatement)) {
+    return "";
+  }
+  return `Removed from ${helper.getBrowserName(browser)} version ${supportStatement.version_removed} on ${helper.getBrowserReleaseDate(browser, supportStatement.version_removed)}`;
 }
 
 function renderVersionAdded(support: any, browser: string, helper: BrowsersHelper): any {
+  const supportStatement = getSupportStatement(support, browser);
 
-  if (("version_added" in support[browser]) == false) {
-    return `Not in ${helper.getBrowserName(browser)}`;
+  if (!supportStatement || ("version_added" in supportStatement) == false) {
+    return `Not in ${helper.getBrowserName(browser)}${renderNotes(support, browser)}`;
   }
 
-  if (support[browser].version_added === true) {
-    return `In ${helper.getBrowserName(browser)} from the start`;
+  if (supportStatement.version_added === true) {
+    return `In ${helper.getBrowserName(browser)} from the start${renderNotes(support, browser)}`;
   }
 
-  if (support[browser].version_added === null) {
-    return `Not in ${helper.getBrowserName(browser)}`;
+  if (supportStatement.version_added === null) {
+    return `Not in ${helper.getBrowserName(browser)}${renderNotes(support, browser)}`;
   }
 
-  if (support[browser].version_added === false) {
-    return `Not in ${helper.getBrowserName(browser)}`;
+  if (supportStatement.version_added === false) {
+    return `Not in ${helper.getBrowserName(browser)}${renderNotes(support, browser)}`;
   }
 
-  return `In ${helper.getBrowserName(browser)} version ${support[browser].version_added} on ${helper.getBrowserReleaseDate(browser, support[browser].version_added)}`;
+  return `In ${helper.getBrowserName(browser)} version ${supportStatement.version_added} on ${helper.getBrowserReleaseDate(browser, supportStatement.version_added)}${renderNotes(support, browser)}`;
 }
