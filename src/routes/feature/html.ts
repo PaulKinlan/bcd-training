@@ -71,8 +71,11 @@ function renderNotes(support: any, browser: string): string {
   const notes: string[] = [];
   for (const entry of entries) {
     if (entry && entry.notes) {
-      const noteText = Array.isArray(entry.notes) ? entry.notes.join(' ') : entry.notes;
-      notes.push(noteText);
+      if (Array.isArray(entry.notes)) {
+        notes.push(...entry.notes.filter((n: unknown) => typeof n === 'string'));
+      } else if (typeof entry.notes === 'string') {
+        notes.push(entry.notes);
+      }
     }
   }
   
