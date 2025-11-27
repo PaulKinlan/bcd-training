@@ -5,15 +5,23 @@ import { CompatData, CompatResult } from "../../types.d.ts";
 import renderNav from "../ui-components/nav.ts";
 import renderFooter from "../ui-components/footer.ts";
 
-type FeatureData = { features: CompatResult[]; bcd: CompatData; browserList: any; helper: BrowsersHelper, featureName: string }
+type FeatureData = { features: CompatResult[]; bcd: CompatData; browserList: any; helper: BrowsersHelper, featureName: string | null }
 
 export default function render({ bcd, featureName, helper }: FeatureData): Response {
 
   const { __meta } = bcd;
 
+  if (!featureName) {
+    return new Response(`Feature ID is required`, { status: 400, headers: { 'content-type': 'text/plain' } });
+  }
+
   const feature = featureName.split(".").reduce((acc, key) => {
-    return acc[key]
+    return acc?.[key]
   }, bcd);
+
+  if (!feature || !feature.__compat) {
+    return new Response(`Feature "${featureName}" not found`, { status: 404, headers: { 'content-type': 'text/plain' } });
+  }
 
   const { mdn_url, spec_url, support, status } = feature.__compat;
 
