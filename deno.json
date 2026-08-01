@@ -1,5 +1,11 @@
 {
   "tasks": {
     "start": "deno run -A --watch=static/,src/,types/ main.ts"
+  },
+  "deploy": {
+    "org": "paulkinlan-ea",
+    "app": "bcd-training"
   }
 }
+
+
